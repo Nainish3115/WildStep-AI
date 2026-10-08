@@ -13,6 +13,14 @@
 <meta property="og:title" content="WildStep AI">
 <meta property="og:description" content="Local AI. Real-world missions. Zero scrolling.">
 <title>WildStep AI — Local AI. Real-world missions. Zero scrolling.</title>
+<meta name="theme-color" content="#2f6b2a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WildStep AI">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="/icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <style>
   :root { --bg:#f3f6ee; --card:#fff; --ink:#1d2a1b; --muted:#5d6b59; --leaf:#2f6b2a; --leaf2:#e4f0dd; --sun:#f2b632; --line:#d9e3d2; }
   * { box-sizing:border-box; }
@@ -260,13 +268,162 @@
     border-color: #10b981;
     color: #a7f3d0;
   }
-  @media print { body { background:#fff; } .noprint, footer, #back, #journal, #fieldMode, #pocketOverlay { display:none !important; } .card { border:2px solid #000; } }
+
+  /* Live GPS Trail Mode & Modals */
+  .field-trail-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background: #0f230d;
+    border-radius: 10px;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: #d1fae5;
+    flex: 0 0 auto;
+    border: 1px solid #1f381c;
+  }
+  .field-trail-stats {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-weight: 600;
+  }
+  .field-gps-pill {
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    background: #27272a;
+    color: #a1a1aa;
+  }
+  .field-gps-pill.active {
+    background: #064e3b;
+    color: #4ade80;
+    border: 1px solid #10b981;
+  }
+  .field-gps-pill.bad {
+    background: #451a03;
+    color: #fde68a;
+    border: 1px solid #d97706;
+  }
+  .field-trail-btn {
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    background: #162a14;
+    color: #86efac;
+    border: 1px solid #2f6b2a;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .field-trail-drawer {
+    background: #081107;
+    border: 1px solid #2f6b2a;
+    border-radius: 12px;
+    padding: 10px;
+    margin-top: 6px;
+    flex: 0 0 auto;
+  }
+  .trail-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+    color: #86efac;
+  }
+  .privacy-note {
+    color: #9ca3af;
+    font-size: 0.75rem;
+  }
+  .trail-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 160px;
+    background: #0b1c0a;
+    border-radius: 8px;
+  }
+  .trail-empty {
+    padding: 24px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.85rem;
+  }
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  .modal-card {
+    background: #0d1a0c;
+    border: 2px solid #2f6b2a;
+    border-radius: 16px;
+    color: #f3f6ee;
+    padding: 20px;
+    max-width: 440px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  .modal-card h2, .modal-card h3 {
+    margin: 4px 0 10px;
+  }
+  .privacy-callout {
+    background: rgba(74, 222, 128, 0.08);
+    border: 1px solid #1f381c;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 0.85rem;
+    color: #a7f3d0;
+    text-align: left;
+    margin: 12px 0;
+    line-height: 1.4;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .summary-stat {
+    background: #081107;
+    border: 1px solid #1f381c;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .summary-stat .stat-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #86efac;
+    letter-spacing: 0.05em;
+  }
+  .summary-stat .stat-val {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-top: 2px;
+  }
+  @media print { body { background:#fff; } .noprint, footer, #back, #journal, #fieldMode, #pocketOverlay, .modal-backdrop { display:none !important; } .card { border:2px solid #000; } }
 </style>
 </head>
 <body>
 <main>
-  <h1>WildStep AI 🌿</h1>
-  <p class="tag">Local AI. Real-world missions. Zero scrolling. An offline-first outdoor companion powered by local open-weight AI.</p>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+    <div>
+      <h1>WildStep AI 🌿</h1>
+      <p class="tag">Local AI. Real-world missions. Zero scrolling. An offline-first outdoor companion powered by local open-weight AI.</p>
+    </div>
+    <button id="installBtn" class="ghost noprint" style="display:none;padding:8px 16px;font-size:0.9rem" aria-label="Install WildStep AI as app">📲 Install App</button>
+  </div>
   <p id="health" class="status noprint" role="status">Checking the local model…</p>
 
   <section class="card noprint" id="setup">
@@ -336,6 +493,22 @@
     </div>
   </div>
 
+  <div class="field-trail-bar">
+    <div class="field-trail-stats">
+      <span id="fieldGpsStatus" class="field-gps-pill" title="GPS status">GPS OFF</span>
+      <span id="fieldDistance" title="Distance walked">0 m</span>
+      <span id="fieldPace" title="Walking pace">--:-- / km</span>
+    </div>
+    <button id="toggleTrailViewBtn" class="field-trail-btn" aria-label="Toggle Trail View">Trail View</button>
+  </div>
+  <div id="fieldTrailDrawer" style="display:none;" class="field-trail-drawer">
+    <div class="trail-drawer-header">
+      <strong>Trail View</strong>
+      <span class="privacy-note">Your trail stays on this device.</span>
+    </div>
+    <div id="fieldTrailSvgContainer"><div class="trail-empty">Start walking to record your trail</div></div>
+  </div>
+
   <div class="field-body">
     <div id="fieldProgressText" class="field-counter">MISSION 1 OF 6</div>
     <div id="fieldEmoji" class="field-emoji" aria-hidden="true">🌱</div>
@@ -363,6 +536,64 @@
   <div class="pocket-hint">Phone away in pocket 🌲<br><br><span id="pocketVoiceNote" style="font-size:0.95rem;color:#4ade80;display:none">🔊 Spoken missions active<br><br></span><span style="font-size:0.95rem;color:#6b7280">Tap anywhere to wake screen</span></div>
 </div>
 
+<div id="gpsModal" role="dialog" aria-modal="true" aria-labelledby="gpsModalTitle" style="display:none;" class="modal-backdrop">
+  <div class="modal-card">
+    <h3 id="gpsModalTitle">Track your walk?</h3>
+    <p>WildStep uses your device location to measure distance and draw your trail.</p>
+    <div class="privacy-callout">🔒 <strong>Your trail stays on this device.</strong><br>GPS coordinates are processed locally and never sent to AI, cloud servers, or third parties.</div>
+    <div class="row" style="margin-top:16px">
+      <button id="enableGpsBtn" style="background:#2f6b2a">Enable Trail</button>
+      <button id="skipGpsBtn" class="ghost">Walk Without GPS</button>
+    </div>
+  </div>
+</div>
+
+<div id="recoverModal" role="dialog" aria-modal="true" aria-labelledby="recoverModalTitle" style="display:none;" class="modal-backdrop">
+  <div class="modal-card">
+    <h3 id="recoverModalTitle">Resume interrupted walk?</h3>
+    <p>An active walk with recorded trail was found from your previous session.</p>
+    <div class="privacy-callout">🔒 Your trail stays on this device.</div>
+    <div class="row" style="margin-top:16px">
+      <button id="resumeWalkBtn" style="background:#2f6b2a">Resume Walk</button>
+      <button id="discardWalkBtn" class="ghost">Discard Walk</button>
+    </div>
+  </div>
+</div>
+
+<div id="summaryModal" role="dialog" aria-modal="true" aria-labelledby="summaryModalTitle" style="display:none;" class="modal-backdrop">
+  <div class="modal-card">
+    <div class="step" style="color:#4ade80">WALK COMPLETE</div>
+    <h2 id="summaryModalTitle" style="margin:6px 0 14px">Adventure Summary</h2>
+    <div class="summary-grid">
+      <div class="summary-stat">
+        <span class="stat-label">Distance</span>
+        <span id="sumDistance" class="stat-val">0 m</span>
+      </div>
+      <div class="summary-stat">
+        <span class="stat-label">Time</span>
+        <span id="sumTime" class="stat-val">00:00</span>
+      </div>
+      <div class="summary-stat">
+        <span class="stat-label">Pace</span>
+        <span id="sumPace" class="stat-val">--:-- / km</span>
+      </div>
+      <div class="summary-stat">
+        <span class="stat-label">Missions</span>
+        <span id="sumMissions" class="stat-val">0 / 0</span>
+      </div>
+    </div>
+    <div style="margin:12px 0 6px;text-align:left">
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:#86efac;margin-bottom:4px">
+        <strong>Trail View</strong>
+        <span class="privacy-note">Recorded locally</span>
+      </div>
+      <div id="summaryTrailSvg"></div>
+    </div>
+    <p class="privacy-note" style="text-align:center;margin:8px 0">Your trail stays on this device.</p>
+    <button id="closeSummaryBtn" style="width:100%;background:#2f6b2a;margin-top:10px">Return to Journal</button>
+  </div>
+</div>
+
 <script>
   const $ = (id) => document.getElementById(id);
   let card = null, results = [];
@@ -372,11 +603,65 @@
   const month = new Date().toLocaleString('en', { month: 'long' });
   $('month').textContent = month;
 
-  fetch('/api/health').then(r => r.json()).then(h => {
-    durable = !!h.durable;
-    $('health').textContent = h.ok ? `Ready · ${h.model} running locally, offline${durable ? ' · durable checking on' : ''}` : (h.error || `Run: ollama pull ${h.model}`);
-    if (!h.ok) $('health').classList.add('bad');
-  }).catch(() => { $('health').textContent = 'Server not reachable'; $('health').classList.add('bad'); });
+  function updateConnectivityStatus() {
+    const isOnline = typeof navigator !== 'undefined' && navigator.onLine !== false;
+    fetch('/api/health').then(r => r.json()).then(h => {
+      durable = !!h.durable;
+      $('health').classList.remove('bad');
+      if (h.ok) {
+        $('health').textContent = `WildStep Ready · App shell ready · Local AI: Available (${h.model})${durable ? ' · durable on' : ''}`;
+      } else {
+        $('health').classList.add('bad');
+        const reason = h.error ? h.error : `Run: ollama pull ${h.model}`;
+        $('health').textContent = `WildStep Ready · App shell ready · Local AI: Offline (${reason}) · Fallback missions available`;
+      }
+    }).catch(() => {
+      $('health').classList.add('bad');
+      if (!isOnline) {
+        $('health').textContent = 'Offline app shell active · Local AI connection unavailable';
+      } else {
+        $('health').textContent = 'App shell available · Local AI server unreachable';
+      }
+    });
+  }
+  updateConnectivityStatus();
+  window.addEventListener('online', updateConnectivityStatus);
+  window.addEventListener('offline', updateConnectivityStatus);
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(err => {
+        console.warn('WildStep Service Worker registration failed:', err);
+      });
+    });
+  }
+
+  let deferredInstallPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const btn = $('installBtn');
+    if (btn) btn.style.display = 'inline-block';
+  });
+
+  const installBtn = $('installBtn');
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      try {
+        await deferredInstallPrompt.userChoice;
+      } catch {}
+      deferredInstallPrompt = null;
+      installBtn.style.display = 'none';
+    });
+  }
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    const btn = $('installBtn');
+    if (btn) btn.style.display = 'none';
+  });
 
   function renderCard() {
     $('title').textContent = card.title;
@@ -419,6 +704,269 @@
   let currentMissionIdx = 0, walkStartMs = null, walkTimerInterval = null, voiceEnabled = false;
 
   const ORDINALS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+
+  function haversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371000;
+    const toRad = Math.PI / 180;
+    const dLat = (lat2 - lat1) * toRad;
+    const dLon = (lon2 - lon1) * toRad;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * toRad) * Math.cos(lat2 * toRad) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  function formatDistance(metres) {
+    if (metres < 1000) {
+      return `${Math.round(metres)} m`;
+    }
+    return `${(metres / 1000).toFixed(1)} km`;
+  }
+
+  function renderTrailSvg(points, width = 320, height = 160) {
+    if (!points || points.length === 0) {
+      return '<div class="trail-empty">Start walking to record your trail</div>';
+    }
+    if (points.length === 1) {
+      const cx = Math.round(width / 2), cy = Math.round(height / 2);
+      return `<svg viewBox="0 0 ${width} ${height}" class="trail-svg" role="img" aria-label="Trail with 1 starting point">
+        <circle cx="${cx}" cy="${cy}" r="7" fill="#4ade80" />
+        <text x="${cx + 12}" y="${cy + 4}" fill="#86efac" font-size="11" font-weight="bold" font-family="sans-serif">START</text>
+      </svg>`;
+    }
+
+    const lats = points.map(p => p.latitude);
+    const lons = points.map(p => p.longitude);
+    const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+    const minLon = Math.min(...lons), maxLon = Math.max(...lons);
+
+    const midLat = (minLat + maxLat) / 2;
+    const k = Math.cos(midLat * Math.PI / 180);
+
+    const spanLon = Math.max((maxLon - minLon) * k, 1e-6);
+    const spanLat = Math.max(maxLat - minLat, 1e-6);
+
+    const padding = 20;
+    const drawW = width - padding * 2;
+    const drawH = height - padding * 2;
+    const scale = Math.min(drawW / spanLon, drawH / spanLat);
+
+    const offsetX = padding + (drawW - spanLon * scale) / 2;
+    const offsetY = padding + (drawH - spanLat * scale) / 2;
+
+    const xy = points.map(p => {
+      const x = offsetX + (p.longitude - minLon) * k * scale;
+      const y = offsetY + (maxLat - p.latitude) * scale;
+      return [Math.round(x * 10) / 10, Math.round(y * 10) / 10];
+    });
+
+    const polylinePts = xy.map(p => p.join(',')).join(' ');
+    const startPt = xy[0];
+    const currentPt = xy[xy.length - 1];
+
+    return `<svg viewBox="0 0 ${width} ${height}" class="trail-svg" role="img" aria-label="Trail view showing recorded path">
+      <polyline points="${polylinePts}" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="${startPt[0]}" cy="${startPt[1]}" r="6" fill="#15803d" stroke="#86efac" stroke-width="2" />
+      <text x="${startPt[0] + 8}" y="${startPt[1] + 4}" fill="#86efac" font-size="10" font-weight="bold">START</text>
+      <circle cx="${currentPt[0]}" cy="${currentPt[1]}" r="8" fill="#facc15" stroke="#ffffff" stroke-width="2" />
+      <text x="${currentPt[0] + 10}" y="${currentPt[1] + 4}" fill="#facc15" font-size="11" font-weight="bold">YOU</text>
+    </svg>`;
+  }
+
+  const trailManager = {
+    active: false,
+    gpsActive: false,
+    points: [],
+    watchId: null,
+    totalDistance: 0,
+    status: 'OFF', // 'OFF' | 'SEARCHING' | 'ACTIVE' | 'UNAVAILABLE' | 'DENIED'
+    errorMsg: null,
+
+    isValidPoint(lat, lon, accuracy, timestamp) {
+      if (typeof lat !== 'number' || typeof lon !== 'number') return false;
+      if (isNaN(lat) || isNaN(lon)) return false;
+      if (lat < -90 || lat > 90 || lon < -180 || lon > 180) return false;
+      if (!timestamp || typeof timestamp !== 'number' || timestamp <= 0) return false;
+      if (typeof accuracy === 'number' && accuracy > 65) return false;
+      return true;
+    },
+
+    addPoint(coords, timestamp) {
+      const { latitude, longitude, accuracy } = coords;
+      if (!this.isValidPoint(latitude, longitude, accuracy, timestamp)) {
+        return false;
+      }
+
+      const newPt = {
+        latitude: Math.round(latitude * 1e6) / 1e6,
+        longitude: Math.round(longitude * 1e6) / 1e6,
+        accuracy: Math.round(accuracy || 0),
+        timestamp: timestamp || Date.now()
+      };
+
+      if (this.points.length > 0) {
+        const last = this.points[this.points.length - 1];
+        if (last.latitude === newPt.latitude && last.longitude === newPt.longitude) {
+          return false;
+        }
+
+        const d = haversineDistance(last.latitude, last.longitude, newPt.latitude, newPt.longitude);
+        if (d < 2) {
+          return false;
+        }
+
+        const dt = (newPt.timestamp - last.timestamp) / 1000;
+        if (dt > 0) {
+          const speed = d / dt;
+          if (speed > 12 && d > 30) {
+            return false;
+          }
+        }
+
+        this.totalDistance += d;
+      }
+
+      this.points.push(newPt);
+      this.persist();
+      this.updateUI();
+      return true;
+    },
+
+    startGps() {
+      if (typeof navigator === 'undefined' || !navigator.geolocation) {
+        this.status = 'UNAVAILABLE';
+        this.errorMsg = 'Geolocation not supported';
+        this.updateUI();
+        return;
+      }
+
+      this.status = 'SEARCHING';
+      this.updateUI();
+
+      try {
+        if (this.watchId !== null) {
+          navigator.geolocation.clearWatch(this.watchId);
+        }
+        this.watchId = navigator.geolocation.watchPosition(
+          (pos) => {
+            this.status = 'ACTIVE';
+            this.gpsActive = true;
+            this.errorMsg = null;
+            this.addPoint(pos.coords, pos.timestamp);
+          },
+          (err) => {
+            if (err.code === 1) {
+              this.status = 'DENIED';
+              this.errorMsg = 'Location permission denied';
+            } else {
+              this.status = 'UNAVAILABLE';
+              this.errorMsg = err.message || 'Position unavailable';
+            }
+            this.gpsActive = false;
+            this.updateUI();
+          },
+          {
+            enableHighAccuracy: true,
+            maximumAge: 5000,
+            timeout: 15000
+          }
+        );
+      } catch (e) {
+        this.status = 'UNAVAILABLE';
+        this.errorMsg = 'Error starting GPS';
+        this.updateUI();
+      }
+    },
+
+    stopGps() {
+      if (this.watchId !== null && typeof navigator !== 'undefined' && navigator.geolocation) {
+        try {
+          navigator.geolocation.clearWatch(this.watchId);
+        } catch {}
+        this.watchId = null;
+      }
+      this.gpsActive = false;
+      if (this.status === 'ACTIVE' || this.status === 'SEARCHING') {
+        this.status = 'OFF';
+      }
+      this.updateUI();
+    },
+
+    calculatePace(elapsedMs) {
+      if (this.totalDistance < 80 || elapsedMs < 30000) {
+        return '--:-- / km';
+      }
+      const km = this.totalDistance / 1000;
+      const s = Math.floor(elapsedMs / 1000);
+      const paceS = s / km;
+      if (paceS < 120 || paceS > 3600) {
+        return '--:-- / km';
+      }
+      const m = Math.floor(paceS / 60);
+      const remS = Math.floor(paceS % 60);
+      return `${String(m).padStart(2, '0')}:${String(remS).padStart(2, '0')} / km`;
+    },
+
+    persist() {
+      store.set('active_trail', {
+        startTime: walkStartMs,
+        points: this.points,
+        totalDistance: this.totalDistance,
+        active: this.active
+      });
+    },
+
+    clear() {
+      this.stopGps();
+      this.points = [];
+      this.totalDistance = 0;
+      this.status = 'OFF';
+      store.set('active_trail', null);
+      this.updateUI();
+    },
+
+    updateUI() {
+      const statusEl = $('fieldGpsStatus');
+      const distEl = $('fieldDistance');
+      const paceEl = $('fieldPace');
+
+      if (distEl) distEl.textContent = formatDistance(this.totalDistance);
+      if (paceEl) {
+        const elapsed = walkStartMs ? Date.now() - walkStartMs : 0;
+        paceEl.textContent = this.calculatePace(elapsed);
+      }
+
+      if (statusEl) {
+        statusEl.className = 'field-gps-pill';
+        if (this.status === 'ACTIVE') {
+          statusEl.classList.add('active');
+          statusEl.textContent = '● GPS ACTIVE';
+          statusEl.title = 'Live trail recording active. Your trail stays on this device.';
+        } else if (this.status === 'SEARCHING') {
+          statusEl.classList.add('bad');
+          statusEl.textContent = 'GPS SEARCHING…';
+        } else if (this.status === 'DENIED') {
+          statusEl.classList.add('bad');
+          statusEl.textContent = 'GPS DENIED';
+          statusEl.title = 'Location permission was denied. Walk tracking disabled.';
+        } else if (this.status === 'UNAVAILABLE') {
+          statusEl.classList.add('bad');
+          statusEl.textContent = 'GPS UNAVAILABLE';
+          statusEl.title = 'Location unavailable. Walk tracking disabled.';
+        } else {
+          statusEl.textContent = 'GPS OFF';
+          statusEl.title = 'Walk tracking disabled';
+        }
+      }
+
+      const drawer = $('fieldTrailDrawer');
+      if (drawer && drawer.style.display !== 'none') {
+        const container = $('fieldTrailSvgContainer');
+        if (container) container.innerHTML = renderTrailSvg(this.points, 280, 140);
+      }
+    }
+  };
 
   const voice = {
     supported() {
@@ -550,6 +1098,131 @@
     walkTimerInterval = setInterval(update, 1000);
   }
 
+  function showWalkSummary() {
+    voice.stop();
+    trailManager.stopGps();
+    if (walkTimerInterval) clearInterval(walkTimerInterval);
+
+    const elapsed = walkStartMs ? Date.now() - walkStartMs : 0;
+    const doneIds = new Set(results.flatMap(r => r.completed.map(c => c.id)));
+    const totalQuests = card && card.quests ? card.quests.length : 0;
+    const completedCount = doneIds.size;
+
+    const distEl = $('sumDistance');
+    const timeEl = $('sumTime');
+    const paceEl = $('sumPace');
+    const missionsEl = $('sumMissions');
+    const trailSvgContainer = $('summaryTrailSvg');
+
+    if (distEl) distEl.textContent = formatDistance(trailManager.totalDistance);
+    if (timeEl) timeEl.textContent = formatElapsed(elapsed);
+    if (paceEl) paceEl.textContent = trailManager.calculatePace(elapsed);
+    if (missionsEl) missionsEl.textContent = `${completedCount} / ${totalQuests}`;
+    if (trailSvgContainer) {
+      trailSvgContainer.innerHTML = renderTrailSvg(trailManager.points, 280, 160);
+    }
+
+    const modal = $('summaryModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      const btn = $('closeSummaryBtn');
+      if (btn) btn.focus();
+    }
+  }
+
+  function promptGpsIfNeeded(onProceed) {
+    if (trailManager.status === 'ACTIVE' || trailManager.status === 'SEARCHING' || trailGpsAnswered) {
+      onProceed();
+      return;
+    }
+    const modal = $('gpsModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      const btn = $('enableGpsBtn');
+      if (btn) btn.focus();
+    }
+    pendingGpsProceed = onProceed;
+  }
+
+  let trailGpsAnswered = false;
+  let pendingGpsProceed = null;
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const gpsM = $('gpsModal');
+      if (gpsM && gpsM.style.display === 'flex') {
+        $('skipGpsBtn').click();
+      }
+      const sumM = $('summaryModal');
+      if (sumM && sumM.style.display === 'flex') {
+        $('closeSummaryBtn').click();
+      }
+      const pOverlay = $('pocketOverlay');
+      if (pOverlay && pOverlay.style.display === 'flex') {
+        pOverlay.style.display = 'none';
+      }
+    }
+  });
+
+  const enableGpsBtn = $('enableGpsBtn');
+  if (enableGpsBtn) {
+    enableGpsBtn.addEventListener('click', () => {
+      trailGpsAnswered = true;
+      const modal = $('gpsModal');
+      if (modal) modal.style.display = 'none';
+      trailManager.active = true;
+      trailManager.startGps();
+      if (pendingGpsProceed) {
+        const fn = pendingGpsProceed;
+        pendingGpsProceed = null;
+        fn();
+      }
+    });
+  }
+
+  const skipGpsBtn = $('skipGpsBtn');
+  if (skipGpsBtn) {
+    skipGpsBtn.addEventListener('click', () => {
+      trailGpsAnswered = true;
+      const modal = $('gpsModal');
+      if (modal) modal.style.display = 'none';
+      trailManager.active = true;
+      if (pendingGpsProceed) {
+        const fn = pendingGpsProceed;
+        pendingGpsProceed = null;
+        fn();
+      }
+    });
+  }
+
+  const toggleTrailViewBtn = $('toggleTrailViewBtn');
+  if (toggleTrailViewBtn) {
+    toggleTrailViewBtn.addEventListener('click', () => {
+      const drawer = $('fieldTrailDrawer');
+      if (!drawer) return;
+      if (drawer.style.display === 'none' || !drawer.style.display) {
+        drawer.style.display = 'block';
+        toggleTrailViewBtn.classList.add('active');
+        toggleTrailViewBtn.textContent = 'Hide Trail';
+        const container = $('fieldTrailSvgContainer');
+        if (container) container.innerHTML = renderTrailSvg(trailManager.points, 280, 140);
+      } else {
+        drawer.style.display = 'none';
+        toggleTrailViewBtn.classList.remove('active');
+        toggleTrailViewBtn.textContent = 'Trail View';
+      }
+    });
+  }
+
+  const closeSummaryBtn = $('closeSummaryBtn');
+  if (closeSummaryBtn) {
+    closeSummaryBtn.addEventListener('click', () => {
+      const modal = $('summaryModal');
+      if (modal) modal.style.display = 'none';
+      closeFieldMode();
+    });
+  }
+
   function updateFieldModeView() {
     if (!card || !card.quests || !card.quests.length) return;
     const total = card.quests.length;
@@ -603,6 +1276,7 @@
     startWalkTimer();
     updateVoiceButtonState();
     updateFieldModeView();
+    trailManager.updateUI();
     if (voiceEnabled) announceMission(currentMissionIdx);
   }
 
@@ -610,13 +1284,30 @@
     voice.stop();
     $('fieldMode').style.display = 'none';
     $('pocketOverlay').style.display = 'none';
+    const drawer = $('fieldTrailDrawer');
+    if (drawer) drawer.style.display = 'none';
+    const trailBtn = $('toggleTrailViewBtn');
+    if (trailBtn) {
+      trailBtn.classList.remove('active');
+      trailBtn.textContent = 'Trail View';
+    }
     renderCard();
-    if (results.length) renderJournal();
+    if (results.length || trailManager.points.length >= 2) renderJournal();
   }
 
-  $('openField').addEventListener('click', () => openFieldMode());
-  $('awayField').addEventListener('click', () => openFieldMode());
-  $('fieldExitBtn').addEventListener('click', closeFieldMode);
+  $('openField').addEventListener('click', () => {
+    promptGpsIfNeeded(() => openFieldMode());
+  });
+  $('awayField').addEventListener('click', () => {
+    promptGpsIfNeeded(() => openFieldMode());
+  });
+  $('fieldExitBtn').addEventListener('click', () => {
+    if (trailManager.points.length > 0 || results.length > 0) {
+      showWalkSummary();
+    } else {
+      closeFieldMode();
+    }
+  });
   $('fieldVoiceBtn').addEventListener('click', toggleVoice);
   $('fieldPocketBtn').addEventListener('click', () => { $('pocketOverlay').style.display = 'flex'; });
   $('pocketOverlay').addEventListener('click', () => { $('pocketOverlay').style.display = 'none'; });
@@ -636,12 +1327,14 @@
   });
 
   $('go').addEventListener('click', () => {
-    const t = new Date(); store.set('quest', { card, startedAt: t.toISOString() });
-    walkStartMs = t.getTime();
-    startWalkTimer();
-    $('startAt').textContent = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    $('awayList').textContent = card.quests.map(q => q.emoji).join('  ');
-    $('away').style.display = 'block'; $('home').focus();
+    promptGpsIfNeeded(() => {
+      const t = new Date(); store.set('quest', { card, startedAt: t.toISOString() });
+      walkStartMs = t.getTime();
+      startWalkTimer();
+      $('startAt').textContent = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      $('awayList').textContent = card.quests.map(q => q.emoji).join('  ');
+      $('away').style.display = 'block'; $('home').focus();
+    });
   });
   $('home').addEventListener('click', () => { $('away').style.display = 'none'; $('photos').focus(); });
 
@@ -682,6 +1375,9 @@
         $('fieldFeedback').textContent = `🏆 Walk complete! All ${totalCount} missions finished!`;
         updateFieldModeView();
         voice.speak(`Walk complete. You finished all ${numWord} missions.`);
+        setTimeout(() => {
+          showWalkSummary();
+        }, 2200);
       } else if (matchCur) {
         triggerHaptic([100, 50, 200]);
         $('fieldFeedback').className = 'field-feedback success';
@@ -797,15 +1493,29 @@
     const mins = timed.length >= 2 ? Math.round((timed[timed.length - 1].t - timed[0].t) / 60000) : 0;
     const found = new Set(results.flatMap(r => r.completed.map(c => c.id))).size;
     $('summary').textContent = `${items.length} photos · ${found} of ${card.quests.length} objectives` +
-      (mins > 0 ? ` · ${mins} minutes from first to last photo` : '');
+      (mins > 0 ? ` · ${mins} minutes from first to last photo` : '') +
+      (trailManager.totalDistance > 0 ? ` · Trail: ${formatDistance(trailManager.totalDistance)}` : '');
     const pts = items.filter(i => i.gps), noTime = items.filter(i => !i.taken_at).length;
     // Messaging apps (WhatsApp and others) and some share sheets strip EXIF, so say so instead of showing nothing.
     const missing = [];
     if (pts.length < items.length) missing.push(`no location in ${items.length - pts.length} of ${items.length} photos`);
     if (noTime) missing.push(`no camera time in ${noTime}`);
-    $('map').innerHTML = (pts.length >= 2 ? routeSvg(pts) : '') + (missing.length ? `<p class="status bad">Heads up: ${missing.join(', ')}.
+    
+    let mapHtml = '';
+    if (trailManager.points.length >= 2) {
+      mapHtml += `<div style="margin-bottom:12px"><div style="font-size:0.85rem;color:#86efac;margin-bottom:4px;font-weight:bold">Live GPS Trail (${formatDistance(trailManager.totalDistance)})</div>` +
+        renderTrailSvg(trailManager.points, 320, 180) +
+        `<p class="status">Trail recorded locally on device (${trailManager.points.length} points).</p></div>`;
+    }
+    if (pts.length >= 2) {
+      mapHtml += routeSvg(pts);
+    }
+    if (missing.length) {
+      mapHtml += `<p class="status bad">Heads up: ${missing.join(', ')}.
       Messaging apps like WhatsApp remove this data, and iPhone sharing can leave location out.
-      For the route and timeline, copy the original photos over USB or AirDrop (with location on in the share options).</p>` : '');
+      For the route and timeline, copy the original photos over USB or AirDrop (with location on in the share options).</p>`;
+    }
+    $('map').innerHTML = mapHtml;
     $('entries').innerHTML = items.map(i => `<div class="journal-item"><img src="${i.thumb}" alt="${esc(i.what_i_see)}">
       <div><span class="time">${i.taken_at ? i.t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : esc(i.name)}</span>
       <div>${esc(i.what_i_see)}</div>
@@ -836,6 +1546,40 @@
   }
   const walk = store.get('walk');
   if (walk && walk.id) { card = walk.card; renderCard(); pollWalk(walk.id); }
+
+  const savedTrail = store.get('active_trail');
+  if (savedTrail && savedTrail.points && savedTrail.points.length > 0) {
+    const recoverModal = $('recoverModal');
+    if (recoverModal) {
+      recoverModal.style.display = 'flex';
+      const rBtn = $('resumeWalkBtn');
+      if (rBtn) rBtn.focus();
+    }
+
+    const resumeBtn = $('resumeWalkBtn');
+    if (resumeBtn) {
+      resumeBtn.addEventListener('click', () => {
+        recoverModal.style.display = 'none';
+        trailManager.points = savedTrail.points || [];
+        trailManager.totalDistance = savedTrail.totalDistance || 0;
+        trailManager.active = true;
+        if (savedTrail.startTime) {
+          walkStartMs = savedTrail.startTime;
+        }
+        trailGpsAnswered = true;
+        trailManager.startGps();
+        openFieldMode();
+      });
+    }
+
+    const discardBtn = $('discardWalkBtn');
+    if (discardBtn) {
+      discardBtn.addEventListener('click', () => {
+        recoverModal.style.display = 'none';
+        trailManager.clear();
+      });
+    }
+  }
 </script>
 </body>
 </html>

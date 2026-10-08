@@ -163,3 +163,31 @@ def test_post_malformed_json_returns_400(test_server):
     )
     # Empty body with Content-Length 0
     assert code == 400
+
+
+def test_post_check_timeout_returns_503(test_server, monkeypatch, simple_jpeg_bytes):
+    """TimeoutError in ollama_chat must produce HTTP 503 instead of crashing the server."""
+    def mock_ollama_timeout(*a, **kw):
+        raise TimeoutError("Ollama request timed out")
+
+    monkeypatch.setattr(server, "ollama_chat", mock_ollama_timeout)
+
+    b64_img = "data:image/jpeg;base64," + base64.b64encode(simple_jpeg_bytes).decode("ascii")
+    payload = {"quests": [{"id": "q1", "text": "A leaf"}], "image": b64_img}
+
+    code, headers, body = http_request(f"{test_server}/api/check", method="POST", json_data=payload)
+    assert code == 503
+    data = json.loads(body.decode("utf-8"))
+    assert "timed out" in data["error"]
+
+
+def test_post_unknown_endpoint_returns_404(test_server):
+    """POST to unhandled route returns 404."""
+    code, headers, body = http_request(
+        f"{test_server}/api/unhandled",
+        method="POST",
+        json_data={"foo": "bar"},
+    )
+    assert code == 404
+    data = json.loads(body.decode("utf-8"))
+    assert data["error"] == "not found"

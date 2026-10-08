@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e230c"/>
+      <stop offset="100%" stop-color="#061205"/>
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#86efac"/>
+    </linearGradient>
+    <linearGradient id="leafDark" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="100%" stop-color="#4ade80"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+  <rect width="504" height="504" x="4" y="4" rx="104" fill="none" stroke="#22c55e" stroke-width="4" stroke-opacity="0.3"/>
+  <!-- Subtle trail compass circle -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#22c55e" stroke-width="6" stroke-dasharray="8 16" stroke-opacity="0.4"/>
+  <!-- Stem / Sprout -->
+  <path d="M256 380 C256 320, 252 260, 240 210" fill="none" stroke="#4ade80" stroke-width="16" stroke-linecap="round"/>
+  <!-- Right Leaf (Primary) -->
+  <path d="M246 250 C240 180, 310 130, 390 140 C400 220, 340 290, 246 250 Z" fill="url(#leafGrad)"/>
+  <path d="M246 250 C290 220, 340 190, 390 140" fill="none" stroke="#0e230c" stroke-width="5" stroke-linecap="round" stroke-opacity="0.4"/>
+  <!-- Left Leaf (Secondary) -->
+  <path d="M244 290 C220 220, 160 190, 110 220 C110 290, 170 330, 244 290 Z" fill="url(#leafDark)"/>
+  <path d="M244 290 C200 270, 160 250, 110 220" fill="none" stroke="#0e230c" stroke-width="5" stroke-linecap="round" stroke-opacity="0.4"/>
+  <!-- Trail / Step Accent Dots -->
+  <circle cx="256" cy="406" r="10" fill="#4ade80"/>
+  <circle cx="256" cy="436" r="7" fill="#4ade80" fill-opacity="0.7"/>
+  <circle cx="256" cy="458" r="5" fill="#4ade80" fill-opacity="0.4"/>
+</svg>

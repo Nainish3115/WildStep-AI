@@ -120,3 +120,37 @@ def test_check_photo_deduplicates_duplicate_checks_in_same_photo(monkeypatch, si
     monkeypatch.setattr(server, "ollama_chat", lambda *a, **kw: json.dumps(duplicate_checks))
     result = server.check_photo(simple_jpeg_bytes, quests)
     assert len(result["completed"]) == 1
+
+
+def test_check_photo_handles_malformed_json_gracefully(monkeypatch, simple_jpeg_bytes):
+    """When Ollama returns invalid JSON, check_photo fails safely without unhandled exceptions."""
+    quests = [{"id": "q1", "text": "A bird"}]
+    monkeypatch.setattr(server, "ollama_chat", lambda *a, **kw: "THIS IS NOT JSON {{{")
+    result = server.check_photo(simple_jpeg_bytes, quests)
+    assert isinstance(result, dict)
+    assert result["completed"] == []
+    assert result["what_i_see"] == ""
+
+
+def test_check_photo_handles_non_dict_json(monkeypatch, simple_jpeg_bytes):
+    """When Ollama returns a list or primitive instead of a JSON object."""
+    quests = [{"id": "q1", "text": "A bird"}]
+    monkeypatch.setattr(server, "ollama_chat", lambda *a, **kw: json.dumps(["not", "an", "object"]))
+    result = server.check_photo(simple_jpeg_bytes, quests)
+    assert isinstance(result, dict)
+    assert result["completed"] == []
+
+
+def test_check_photo_handles_corrupted_checks_array(monkeypatch, simple_jpeg_bytes):
+    """When checks contains non-dict elements or is not a list."""
+    quests = [{"id": "q1", "text": "A bird"}]
+    corrupted = {
+        "what_i_see": "A scene",
+        "main_subject": "A subject",
+        "checks": ["not a dict", None, 42],
+    }
+    monkeypatch.setattr(server, "ollama_chat", lambda *a, **kw: json.dumps(corrupted))
+    result = server.check_photo(simple_jpeg_bytes, quests)
+    assert isinstance(result, dict)
+    assert result["completed"] == []
+    assert result["what_i_see"] == "A scene"

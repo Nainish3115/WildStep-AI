@@ -235,16 +235,27 @@ def check_photo(jpeg: bytes, quests):
         check_schema(ids),
         temperature=0,
     )
-    data = json.loads(content)
+    try:
+        data = json.loads(content)
+        if not isinstance(data, dict):
+            data = {}
+    except (json.JSONDecodeError, TypeError):
+        data = {}
+
     done, seen = [], set()
-    for c in data.get("checks", []):
-        qid, ev = c.get("id"), str(c.get("evidence", "")).strip()
-        # Two explicit yes/no answers per quest, both required: is it in the photo, and is it what the
-        # photo is mainly of? This stops background leaves or sky from earning points.
-        if (c.get("completed") is True and c.get("is_main_subject") is True
-                and qid in by_id and qid not in seen and len(ev) > 10):
-            done.append({"id": qid, "evidence": ev[:200]})
-            seen.add(qid)
+    checks = data.get("checks")
+    if isinstance(checks, list):
+        for c in checks:
+            if not isinstance(c, dict):
+                continue
+            qid = c.get("id")
+            ev = str(c.get("evidence", "")).strip()
+            # Two explicit yes/no answers per quest, both required: is it in the photo, and is it what the
+            # photo is mainly of? This stops background leaves or sky from earning points.
+            if (c.get("completed") is True and c.get("is_main_subject") is True
+                    and qid in by_id and qid not in seen and len(ev) > 10):
+                done.append({"id": qid, "evidence": ev[:200]})
+                seen.add(qid)
     return {"what_i_see": str(data.get("what_i_see", "")).strip()[:300],
             "main_subject": str(data.get("main_subject", "")).strip()[:80], "completed": done}
 
@@ -320,7 +331,8 @@ class Handler(BaseHTTPRequestHandler):
         if STATIC.resolve() not in path.parents or not path.is_file():
             return self._json(404, {"error": "not found"})
         ctype = {".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css",
-                 ".svg": "image/svg+xml", ".png": "image/png"}.get(path.suffix, "application/octet-stream")
+                 ".svg": "image/svg+xml", ".png": "image/png",
+                 ".webmanifest": "application/manifest+json", ".json": "application/json"}.get(path.suffix, "application/octet-stream")
         body = path.read_bytes()
         self.send_response(200)
         self.send_header("Content-Type", ctype)
@@ -356,10 +368,12 @@ class Handler(BaseHTTPRequestHandler):
                 result.update(taken_at=taken, gps=gps,
                               thumb="data:image/jpeg;base64," + base64.b64encode(jpeg).decode())
                 return self._json(200, result)
-        except urllib.error.URLError:
-            return self._json(503, {"error": "The local model is not running. Start Ollama."})
+        except (urllib.error.URLError, TimeoutError):
+            return self._json(503, {"error": "The local model is not running or timed out. Start Ollama."})
         except (ValueError, OSError) as e:
             return self._json(400, {"error": f"Could not read that photo ({type(e).__name__})"})
+        except Exception as e:
+            return self._json(500, {"error": f"Internal server error ({type(e).__name__})"})
         return self._json(404, {"error": "not found"})
 
 

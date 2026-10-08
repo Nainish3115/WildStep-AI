@@ -1,279 +1,313 @@
-# WildStep AI
+# WILDSTEP AI
 
 **Local AI. Real-world missions. Zero scrolling.**
 
-Developer & Maintainer: **Nainish Jaiswal**
+Developer & Maintainer: **Nainish Jaiswal**  
+License: **MIT** · Open-Weight Model: **Google Gemma 4 E2B (via Ollama)**
 
-> WildStep AI is an offline-first outdoor companion powered by local open-weight AI. It prepares personalized real-world missions, helps verify discoveries, and creates a local adventure journal — while deliberately minimizing the time the user spends looking at a screen.
+> Modern AI products keep people glued to glowing screens.  
+> **WildStep AI uses local open-weight AI to do the exact opposite: give people a reason to put the phone down, head outdoors, and observe the physical world.**
+
+---
+
+## WildStep in 30 Seconds
+
+```text
+       Enter walking context (place, season, companions)
+                              ↓
+        Local Gemma AI synthesizes a 6-item mission
+                              ↓
+          Step outside · Phone locked in pocket
+                              ↓
+        Hear spoken missions · Observe nature live
+                              ↓
+        Snap camera evidence · Local AI evaluates
+                              ↓
+   On-device GPS records trail · Zero cloud upload
+                              ↓
+        Inspect verified journal & offline SVG map
+```
+
+---
+
+## Why WildStep?
+
+### 🧠 Local Open-Weight AI
+Powered by Google's open-weight **Gemma 4 E2B** running locally through **Ollama**. Zero API keys, zero cloud inference costs, and zero external network latency.
+
+### 🌲 Real-World Physical Interaction
+Instead of generating digital feeds to consume, WildStep synthesizes real-world observational missions that demand physical movement and mindful outdoor presence.
+
+### 📍 Local-First GPS Trail
+A built-in Live GPS Trail engine filters jitter and projects your path directly into dynamic vector SVG. Coordinates are processed client-side and never leave your device.
+
+### 📷 Local Evidence Verification
+Capture discoveries with your device's native camera. An on-device multimodal vision judge evaluates evidence descriptions without uploading photos to any cloud.
+
+### 🔒 Local-First Privacy Architecture
+Coordinates are processed client-side and never sent in API payloads or Ollama prompts. No remote map tiles, analytics beacons, or cloud AI endpoints are utilized. Photos remain on the host device.
+
+### 📱 Field-First Ergonomics
+High-contrast sunlight-readable **Outdoor Field Mode**, native browser **Voice Mode**, haptic confirmations, single-tap **OLED Pocket Mode**, and installable **PWA** support eliminate screen distraction.
+
+---
+
+## Feature Matrix
+
+| Capability | WildStep AI |
+|---|:---:|
+| Local open-weight AI | ✅ |
+| Gemma via Ollama | ✅ |
+| Local image processing | ✅ |
+| Client-side GPS | ✅ |
+| Offline trail visualization | ✅ |
+| Voice interaction | ✅ |
+| Haptic feedback | ✅ |
+| Outdoor Field Mode | ✅ |
+| OLED Pocket Mode | ✅ |
+| Installable PWA | ✅ |
+| Deterministic safety filtering | ✅ |
+| Deterministic demo runner | ✅ |
+| Cloud AI required | ❌ |
+| Remote map tiles required | ❌ |
+| Analytics tracking | ❌ |
+
+---
+
+## Why WildStep Fits "Touch Grass"
+
+The hackathon theme asks: *How can technology encourage healthier real-world living?*
+
+Most AI systems treat the user as an eyeball to keep retained on a screen:
+* Social feeds maximize time spent scrolling.
+* Chatbots reward longer typing sessions.
+* Generative AI encourages infinite media generation.
+
+**WildStep AI inverts the interaction model:**
+```text
+      AI Interaction: 2 minutes (Prepare personalized outdoor mission)
+                                ↓
+      Physical Movement: 60 minutes (Walk, observe nature, listen to audio)
+                                ↓
+      Review & Journal: 2 minutes (Inspect verified discoveries and trail)
+```
+
+The technology acts strictly as an **igniter for outdoor exploration**, not a destination. You prepare on the screen, hear the objective, put the phone away, and connect with nature.
 
 ---
 
 ## Judge Quickstart
 
-### What is WildStep AI?
-WildStep AI is an outdoor companion that uses local open-weight AI (Gemma via Ollama) to prepare personalized nature scavenger hunts, helps you explore with your phone in your pocket, verifies camera evidence locally, and tracks your physical journey without external maps, cloud APIs, or screen scrolling.
+Experience WildStep AI in under two minutes on any standard laptop or workstation.
 
-### Prerequisites (Clear Distinction)
+### Requirements
+- **Python 3.10+**
+- **Pillow** (`pip install -r requirements.txt`)
+- *(Optional for live LLM)*: **[Ollama](https://ollama.com)** with `ollama pull gemma4:e2b`
 
-**Required for Full Local AI:**
-- **Python 3.10+** (standard library HTTP server; only `Pillow>=10` required)
-- **[Ollama](https://ollama.com)** running locally on `http://127.0.0.1:11434`
-- **Gemma model**: `ollama pull gemma4:e2b`
+*(If Ollama is not running, WildStep AI automatically falls back to curated deterministic offline missions, allowing complete evaluation without model downloads).*
 
-**Required for Deterministic Offline / Fallback Use:**
-- **Python 3.10+** and `pip install -r requirements.txt`
-*(If Ollama is not installed or offline, WildStep automatically runs using deterministic built-in fallback missions).*
+### Launch the Application
 
-**Optional:**
-- **Temporal**: `temporal server start-dev` (only if you want background workflow durability for batch photo checks; not needed for standard walking and Field Mode).
-
-### How do I run it?
-
-```bash
+```powershell
 # 1. Install dependencies
 pip install -r requirements.txt
 
-# 2. (Optional, for full AI inference) Pull local model
-ollama pull gemma4:e2b
-
-# 3. Start WildStep AI
+# 2. Start the local server
 python server.py
 ```
-Open **`http://127.0.0.1:8777`** in your browser.
 
-### How do I experience the main demo?
+Open your browser to:
+```text
+http://127.0.0.1:8777
+```
 
-1. **Check Status**: Notice the readiness indicator at the top: `WildStep Ready · App shell ready · Local AI: Available` (or `Local AI: Offline ... Fallback missions available`).
-2. **Prepare Mission**: Click **"Quick mission"** for an instant local card, or enter your park/season and click **"Make a new mission"**.
-3. **Start the Walk**: Tap **"Start Walk"** or **"Outdoor Field Mode"**.
-4. **GPS Choice**: Select **"Enable Trail"** to record your walking route locally (or **"Walk Without GPS"**).
-5. **Field Mode & Voice**: Review the first objective. Tap **"🔊 Voice On"** to hear spoken guidance.
-6. **Capture Evidence**: Tap **"📷 SNAP EVIDENCE"** and take/select a photo. Notice haptic and immediate AI feedback.
-7. **Trail View**: Tap **"Trail View"** in the top bar to inspect your live offline SVG route path.
-8. **Complete & Journal**: Tap **"Exit Field Mode"** to view your Adventure Summary dialog and review your permanent local Journal.
-
-### Does it require API keys?
-> **No.** No external AI, cloud vision, or map API keys are required.
-
-### Where does the AI run?
-> **100% locally on your machine.** AI inference runs strictly through your local Ollama daemon. No prompts, images, or observations leave your device.
-
-### Where does location data go?
-> **GPS trail data stays on your device.** Live coordinates are processed client-side and saved only in local browser storage (`localStorage`). Coordinates are never sent to Ollama, the Python server, or any third party.
+### Live Experience Walkthrough
+1. **Health Banner:** Confirm `WildStep Ready · App shell ready · Local AI: Available` (or deterministic offline fallback mode).
+2. **Generate Mission:** Click **"Quick Mission (instant)"** or enter a local park (e.g., *"Central Park, spring"*) and click **"Generate Mission"**.
+3. **Launch Field Mode:** Click **"🥾 Outdoor Field Mode"** to enter the high-contrast outdoor HUD.
+4. **Enable GPS & Voice:** Allow location tracking to activate the live GPS trail bar and toggle **"🔊 Voice On"** for spoken guidance.
+5. **Snap Evidence:** Click **"📷 SNAP EVIDENCE"** and upload any sample from `samples/` (e.g. `samples/acridotheres-tristis.jpg`). Notice local analysis, haptic pattern, and automatic mission progression.
+6. **Inspect Trail & Summary:** Tap **"Trail View"** to inspect the live SVG path, then **"✕ Exit"** to view the Adventure Summary modal and the permanent chronological Journal.
 
 ---
 
-## Running the Deterministic Demo
+## One-Command Deterministic Demo
 
-For interviews, automated evaluation, or local verification without walking outside, WildStep AI provides a **deterministic demo runner**:
+Want to inspect every architectural layer without walking outside or starting Ollama?
 
-```bash
+```powershell
 python scripts/run_demo.py
 ```
 
-### Why Demo Mode Exists
-- Demonstrates the complete end-to-end WildStep flow in seconds.
-- Does **not** require an active Ollama instance, GPU, internet connection, camera hardware, or physical outdoor movement.
-- Completely isolated: writes artifacts exclusively to `demo_output/` (`trail.svg`, `demo_journal.json`) without mutating real user data or production state.
+The deterministic demo runner runs in **~1.5 seconds**, exercises genuine production logic, and outputs verifiable artifacts to `demo_output/`:
 
-### Real vs. Simulated Components
-- **REAL (Production Logic Exercised):**
-  - Deterministic safety regex rules (`UNSAFE`, `PHOTO_ONLY`) and fallback pool swaps.
-  - Multi-objective photo verification schema constraints and scoring thresholds.
-  - Geolocation accuracy thresholds ($acc \le 65\text{m}$), stationary jitter deduplication ($< 2\text{m}$), and jump rejection ($> 12\text{m/s}$).
-  - Spherical Haversine distance calculation and gated pace formatting.
-  - Offline vector SVG projection with start marker, current position marker, and aspect ratio normalization.
-  - Local walk journal compilation.
-- **SIMULATED (Demonstration Fixtures):**
-  - Fixed GPS trail coordinates (scenic nature walk along Vetal Tekdi in Pune, Maharashtra).
-  - Deterministic image fixture (`samples/acridotheres-tristis.jpg`).
-  - Fixed demo timestamp (`2026-10-08T10:00:00Z`).
-  - Mocked open-weight LLM responses validating the exact JSON schema.
+```text
+================================================================
+ WILDSTEP AI — DETERMINISTIC DEMO RUNNER
+ Local AI. Real-world missions. Zero scrolling.
+ Developer & Maintainer: Nainish Jaiswal
+================================================================
+ [1] DEMO SCENARIO CONFIGURATION
+     Location:   Vetal Tekdi, Pune, Maharashtra
+     Season:     October (Post-Monsoon Autumn)
+     Companion:  Solo nature walker
+ [2] SAFETY RULES & DETERMINISTIC FILTERING (REAL CODE)
+     [REJECTED] Unsafe objective: 'Climb up the steep rocky cliff edge' -> Filtered
+     [CAUTION]  Mushroom objective: 'Wild mushrooms on rotting wood' -> Tagged photo-only
+     [ACCEPTED] Low-risk objective: 'A bird resting on a tree branch'
+ [3] MISSION GENERATION & SELECTION
+     Title:          Vetal Hill Nature Trail (6 validated quests)
+ [4] EVIDENCE VERIFICATION (REAL PREPROCESSING + FIXTURE JUDGE)
+     Fixture File:   samples/acridotheres-tristis.jpg
+     AI Evaluation:  Common Myna bird in dry grass -> VERIFIED (+15 pts)
+ [5] LIVE GPS TRAIL MODE (REAL FILTERING & HAVERSINE MATH)
+     Raw Points: 9 | Points Kept: 8 | Points Dropped: 1 (accuracy > 65m filter)
+     Distance: 782 m | Elapsed: 09:20 | Pace: 11:56 / km
+ [6] GPS PRIVACY ARCHITECTURE VERIFICATION
+     ✓ Coordinates computed purely client-side
+     ✓ Zero coordinates sent in /api/* request payloads
+     ✓ Zero coordinates transmitted to Ollama prompts
+     ✓ Zero external map tiles or remote mapping APIs utilized
+ [7] VECTOR TRAIL VIEW PROJECTION (REAL SVG RENDERER)
+ [8] ISOLATED DEMO ARTIFACT CREATION
+     Rendered SVG:   demo_output\trail.svg
+     Saved Journal:  demo_output\demo_journal.json
+================================================================
+```
 
----
-
-## Interview Showcase (3–5 Minute Walkthrough)
-
-When demonstrating WildStep AI in a technical interview:
-
-1. **The Problem (30s):** Outdoor apps often trap people into staring at screens, feeds, and inaccurate species classifiers while hiking. WildStep's philosophy is *"Prepare on the screen. Listen to the mission. Put the phone away. Touch grass."*
-2. **Local AI Architecture (30s):** Explain that WildStep runs entirely offline on-device with open-weight Gemma via local Ollama. Zero cloud APIs, zero subscription fees.
-3. **Execute the Demo (30s):** Run `python scripts/run_demo.py` in the terminal to showcase the full pipeline synchronously.
-4. **Safety Pipeline (45s):** Point out how AI suggestions are never trusted blindly; deterministic code flags unsafe activities (cliffs, climbing, water, wildlife touching) and appends caution warnings to mushrooms or berries.
-5. **Local Evidence Verification (45s):** Explain that the local multimodal judge requires both `is_main_subject=True` and concrete evidence descriptions to award points, preventing background noise from scoring.
-6. **Privacy-First GPS (45s):** Highlight Live GPS Trail Mode: coordinates are filtered and projected into vector SVGs purely on the device. Coordinates are never sent in HTTP request bodies or LLM prompts.
-7. **PWA & Field Mode (30s):** Show that WildStep installs as a standalone PWA with an offline app shell, spoken voice guidance, and OLED Pocket Mode.
-
----
-
-## What is WildStep AI?
-
-WildStep AI turns outdoor walks into focused real-world discovery sessions without screen addiction. The verified application workflow operates as follows:
-
-1. **User enters an outdoor location and context:** Provide where you plan to walk (e.g., local park, lake trail, neighbourhood) and who is joining (e.g., solo, with children).
-2. **Local Gemma generates an outdoor scavenger mission:** A local open-weight model writes a 6-item mission card adapted to the actual geographical context, current month, and seasonal climate.
-3. **User receives the mission:** The card presents concrete, visible outdoor objectives with assigned point values and emojis. Users can inspect the card or use browser print to take a physical paper copy.
-4. **User enters Phone Away mode:** Triggering the departure timer opens a dedicated full-screen lockout view designed to keep the phone in your pocket during the walk.
-5. **User goes outside:** The user walks outdoors with their phone put away, only retrieving the device to take photos of discoveries.
-6. **User photographs discoveries:** Native camera photos capture nature elements without any immediate in-field appraisal or scrolling.
-7. **Local vision inference evaluates evidence:** Back home, the user drops photos into the application. A local multimodal vision model evaluates each photograph against active mission objectives.
-8. **EXIF/GPS information is processed locally:** Camera capture timestamps and geographic coordinates embedded in the photo headers are extracted and validated entirely on the local machine.
-9. **The application produces a local walk journal and route visualization:** A chronological field journal is generated alongside an offline SVG route map linking the photo locations.
-
----
-
-## Why WildStep AI?
-
-Modern mobile outdoor applications frequently produce the opposite of their intended effect: users spend their time outdoors staring at screens, checking feeds, consulting social leaderboards, or arguing with inaccurate classifiers.
-
-WildStep AI is built on a distinct design principle:
-
-> **The application is designed to use AI briefly so that the user can spend more time away from the screen.**
-
-You spend two minutes with AI before leaving, keep the device in your pocket for an hour while exploring the physical world, and spend two minutes reviewing your verified discoveries upon returning.
+### Production Code vs. Demo Fixtures
+* **Real Production Code Exercised:**
+  - Regex safety rules (`UNSAFE`, `PHOTO_ONLY`) and fallback pool swaps.
+  - Multi-objective vision evidence verification scoring logic.
+  - Geolocation accuracy filtering ($\le 65\text{m}$), jitter deduplication ($< 2\text{m}$), and velocity jump rejection ($> 12\text{m/s}$).
+  - Spherical Haversine distance calculations and gated pace estimation.
+  - Offline mathematical SVG projection (`START` and `YOU` markers).
+  - Chronological field journal compilation.
+* **Deterministic Fixtures (No External Dependencies):**
+  - Scenic trail GPS coordinates from Vetal Tekdi.
+  - Sample nature photograph (`samples/acridotheres-tristis.jpg`).
+  - Fixed timestamp (`2026-10-08T10:00:00Z`).
+  - Deterministic model JSON response matching `QUEST_SCHEMA`.
 
 ---
 
-## Local AI
+## 3-Minute Judge Demo Script
 
-WildStep AI relies entirely on local open-weight models executed on your hardware:
+If presenting WildStep AI to a judging panel or interviewer, use this high-impact walkthrough:
 
-* **Inference Engine:** Powered by [Ollama](https://ollama.com), running locally over `http://127.0.0.1:11434`.
-* **Model:** Default configured to Google's open-weight `gemma4:e2b` (quantized local vision and instruction model), configurable via `QUEST_MODEL`.
-* **Structured Generation:** Mission generation enforces strict JSON Schemas (`QUEST_SCHEMA`) through Ollama's constrained grammar generation, preventing broken output formats.
-* **Local Vision Evidence Verification:** Rather than performing brittle fine-grained species identification that frequently misleads users, the model is prompted as an impartial scavenger hunt judge. It answers coarse observational questions: *Is the requested subject clearly present? Is it the main subject of the frame? What is the specific visible evidence?* Points are awarded only when both the completion flag and main-subject flag are validated with concrete evidence descriptions.
-
----
-
-## Privacy
-
-* **Zero Cloud APIs:** No OpenAI, Google Cloud, Anthropic, or remote telemetry endpoints.
-* **Photos Never Leave Your Machine:** All image files are read, downsampled, and evaluated directly in host memory or local storage.
-* **Location Data Remains Private:** GPS coordinates extracted from photo EXIF tags are processed locally and rendered into self-contained vector paths. No mapping provider ever receives your location traces.
-
----
-
-## Offline Operation
-
-WildStep AI is architected from the ground up to operate without an active internet connection once initial dependencies and models are downloaded:
-
-* **Zero Remote Assets:** No external CDNs, remote web fonts, analytics beacons, or remote style libraries. All assets are served from the local HTTP server.
-* **Tile-Free Route Rendering:** Route maps are generated using an internal mathematical projection into pure SVG polylines directly from photo GPS coordinates. No map tile downloads (OpenStreetMap, Mapbox, Google Maps) are needed.
-* **Offline App Shell:** Service worker pre-caches the complete frontend shell, icons, and manifest, enabling the application interface to load reliably even when disconnected from the network.
-* **Runtime Locality:** All LLM inference, EXIF extraction, and journal construction run on the local machine.
+* **0:00 — The Problem (20s):**  
+  *"Most outdoor apps do the opposite of what they promise: they keep you staring at a screen while hiking. WildStep uses local open-weight AI to give you a reason to put the phone in your pocket and touch grass."*
+* **0:20 — Landing & Local AI (25s):**  
+  Show the landing page. Point to the Local AI status badge. Emphasize that all intelligence runs on-device through Ollama with Google's Gemma model—zero cloud APIs, zero subscriptions, zero coordinate tracking.
+* **0:45 — Start a Walk (30s):**  
+  Click *Quick Mission* or generate a custom expedition. Show the 6-item nature scavenger card. Click *🥾 Outdoor Field Mode*.
+* **1:15 — The Outdoor Field HUD (35s):**  
+  Highlight the sunlight-readable high-contrast interface. Toggle *🔊 Voice On* to hear spoken objective audio. Show *🌙 Pocket Mode* locking the display to pitch black (`#000`) for OLED power savings.
+* **1:50 — Camera Evidence & Local Vision (35s):**  
+  Click *📷 SNAP EVIDENCE* and upload a photo. Show the local multimodal judge evaluating the evidence and awarding points with dual-pulse haptic feedback.
+* **2:25 — Live GPS Trail & Adventure Summary (35s):**  
+  Toggle *Trail View* to show the mathematically projected SVG route. Exit Field Mode to reveal the complete Adventure Summary (distance, time, pace, objectives completed) and the permanent local Journal.
+* **3:00 — Wrap-Up:**  
+  *"Zero cloud dependencies. Local-first privacy. An AI application that measures success by how little you look at the screen."*
 
 ---
 
-## Current Features
+## How the Local AI Works
 
-* **Installable PWA & Offline App Shell:** Standard Web App Manifest, custom responsive icons, and versioned service worker shell caching (`wildstep-shell-v1`) for standalone mobile installation.
-* **Outdoor Field Mode:** A dedicated, high-contrast, sunlight-readable, zero-scrolling UI for in-field exploration. Features direct camera capture, haptic feedback, auto-advance, walk timer, and an OLED Pocket Mode screen lock.
-* **Voice-First Field Mode:** Native browser text-to-speech audio guidance announcing active missions, in-pocket progress, and verification feedback without cloud dependencies.
-* **Contextual Mission Synthesis:** Synthesizes balanced 6-objective outdoor scavenger missions tailored to season, biome, and walking companions.
-* **Instant Fallback Missions:** Instant non-LLM mission generation sourced from a curated internal safe pool.
-* **Phone Away Mode:** Dedicated full-screen focus overlay recording start time and discouraging in-walk screen usage.
-* **Dual-Condition Vision Verification:** Checks whether an item is present, whether it represents the main subject, and whether verifiable evidence exists.
-* **EXIF Date & GPS Extraction:** Automatically reads photo capture timestamps (`DateTimeOriginal`) and geolocation coordinates (`GPSInfo`).
-* **Offline Vector Route Map:** Plots walk path geometry and calculates total distance between photographic waypoints using pure mathematical SVG.
-* **Chronological Walk Journal:** Visual timeline organizing photographs, capture times, verified mission badges, and missing metadata warnings.
-* **Optional Durable Execution (Temporal):** Optional fault-tolerant batch photo processing backed by an embedded local Temporal dev server, allowing browser tabs to close during long verification batches.
+WildStep AI pairs local open-weight LLM generation with deterministic safety validation. Model output is never blindly trusted.
 
----
+```text
+               User Walking Context (Location, Season, Group)
+                                     ↓
+               Deterministic Input Sanitization & Safety Check
+                                     ↓
+                     Ollama Local Inference Engine
+                 [Google Gemma 4 E2B Quantized Model]
+                                     ↓
+             Constrained JSON Schema Grammar (QUEST_SCHEMA)
+                                     ↓
+               Deterministic Post-Processing & Normalization
+        (Unsafe actions replaced with safe pool; cautions appended)
+                                     ↓
+                     Structured 6-Item Mission Card
+                                     ↓
+                     Camera Discovery Captured in Field
+                                     ↓
+                    Local Preprocessing (Pillow Downsampling)
+                                     ↓
+                  Multimodal Gemma Judge via Local Ollama
+         (Answers: Is subject present? Is it main subject? What is evidence?)
+                                     ↓
+               Dual-Condition Points Awarded & Journal Entry
+```
 
-## Outdoor Field Mode
-
-Outdoor Field Mode implements WildStep AI's core philosophy: **"Prepare on the screen. Then put the phone away."**
-
-When walking outdoors, users need minimal screen interaction, maximum sunlight legibility, and zero distractions:
-
-* **Sunlight-Readable High-Contrast Design:** Glare-resistant dark green/black canvas (`#081107`) with neon status accents (`#4ade80`) and oversized typography legible even in harsh outdoor sunlight.
-* **Zero Scrolling Layout:** Single-screen viewport layout (`100dvh`) with safe-area insets (`env(safe-area-inset-*)`) and touch-optimized controls ($\ge 48\text{px}$ touch targets).
-* **Focused Single-Mission View:** Displays one objective at a time (e.g. `MISSION 2 OF 6 · 150 PTS`, large emoji, objective description) with simple Previous/Next navigation.
-* **Direct Native Camera Capture:** Integrated `<input type="file" accept="image/*" capture="environment">` directly launches the phone camera without file picker detours.
-* **Immediate Local Verification & Haptics:** Snapped evidence is sent directly to the local `/api/check` vision pipeline. Provides dual-pulse success haptics (`navigator.vibrate`) on verification and informative retry guidance when objectives are not detected.
-* **Auto-Progression:** Automatically advances to the next unfinished outdoor objective upon successful verification.
-* **OLED Pocket Mode:** One-tap screen lock that drops display output to pure `#000` black with a dim clock, eliminating accidental touches inside pockets and maximizing battery life on OLED panels.
-* **Elapsed Walk Timer:** Tracks active outdoor exploration duration continuously across mode switches.
-
----
-
-## Voice-First Field Mode
-
-WildStep AI expands the outdoor experience with **Voice-First Field Mode**, designed around the expanded philosophy:
-
-> **"Prepare on the screen. Listen to the mission. Put the phone away. Touch grass."**
-
-Voice guidance allows users to keep their eyes up and phones in their pockets throughout exploration:
-
-* **100% Local Native Speech Synthesis:** Powered entirely by the client browser's native `window.speechSynthesis` and `SpeechSynthesisUtterance`. Zero remote TTS APIs (no ElevenLabs, Google Cloud, Azure, or OpenAI speech services), zero audio files, and zero external CDNs.
-* **Spoken Mission Announcements:** Concisely announces the active objective (e.g., *"Mission one. Find a leaf larger than your hand."*) without reading technical metadata, points, or verbose model instructions.
-* **In-Pocket Verification Audio:** Provides immediate spoken feedback after photo capture:
-  - **Success:** *"Mission complete. Nice find. Next mission. [Next objective]."*
-  - **Retry Guidance:** *"Not enough evidence. AI saw [observation]. Try another photo."*
-  - **Walk Completion:** *"Walk complete. You finished all six missions."*
-* **Seamless Pocket Mode Integration:** Operates together with OLED Pocket Mode so users can hear mission updates and capture feedback without taking the phone out to inspect the screen.
-* **Speech Queue Management & Sanitization:** Automatically cancels in-progress speech when new events trigger to prevent audio overlap. All spoken text is sanitized to strip HTML, JSON, raw prompts, and runaway LLM reasoning.
-* **Autoplay & Permission Safety:** Voice is disabled by default to respect browser autoplay policies; enabling it requires an explicit user gesture (`🔊 Voice On`).
-* **Graceful Degradation:** When `window.speechSynthesis` is unavailable (e.g. specialized mobile browsers, headless environments), voice controls clearly indicate `🔇 Voice N/A` and all visual/haptic features continue functioning completely without degradation.
-
-*(Note: Voice availability depends on client browser and operating system support for the Web Speech API. Modern desktop and mobile browsers like Chrome, Edge, Safari, and Firefox support speech synthesis, though voice accents and system audio policies may vary by OS).*
+### Safety Filters: Deterministic Code Over Heuristics
+1. **Blacklist (`UNSAFE` regex):** Discards objectives suggesting climbing steep cliffs, swimming, entering water, touching wildlife, tasting plants, night exploration, or walking along railway tracks.
+2. **Caution Injection (`PHOTO_ONLY` regex):** Automatically appends `(photo only, don't touch)` to mushrooms, fungi, wild berries, nests, or animal habitats.
+3. **Fallback Pool (`SAFE_POOL`):** Any objective rejected by safety or failing JSON parsing is replaced with verified safe nature observation prompts.
 
 ---
 
-## PWA / Offline App Shell
+## Your Data Stays With You (Local-First Privacy Architecture)
 
-WildStep AI functions as an installable **Progressive Web App (PWA)** built around the workflow:
+```text
+                  YOUR PERSONAL DEVICE
+   ┌────────────────────────────────────────────────────────┐
+   │                                                        │
+   │   📷 Camera Photos ─────────┐                          │
+   │                             ↓                          │
+   │   🛰️ GPS Coordinates ─── WildStep AI Core Engine       │
+   │                             │                          │
+   │                             ↓                          │
+   │                      Local Gemma AI                    │
+   │                   (via Ollama Daemon)                  │
+   │                             │                          │
+   │                             ↓                          │
+   │            Local SVG Trail & Browser Storage           │
+   │                                                        │
+   └────────────────────────────────────────────────────────┘
 
-> **"Install once. Prepare your mission. Go outside."**
+              ✕ Zero photo uploads to cloud
+              ✕ Zero GPS coordinate transmission
+              ✕ Zero remote map tile downloads
+              ✕ Zero cloud LLM endpoints
+              ✕ Zero analytics tracking beacons
+```
 
-* **Installable Utility:** Supports home-screen installation on Android, iOS, and desktop browsers via `manifest.webmanifest` and `beforeinstallprompt`. An unobtrusive `📲 Install App` button appears only when the browser allows installation.
-* **Cached Application Shell (`wildstep-shell-v1`):** A lightweight service worker (`static/sw.js`) pre-caches core static assets (`/`, `/index.html`, `/manifest.webmanifest`, SVG and PNG icons). The UI shell launches instantly even when the device has no network connection.
-* **Architectural Honesty:** While the application shell opens offline, WildStep AI never fakes AI inference or pretends local LLM generation happens inside the browser sandbox without the host backend. The system operates in a clear hierarchy:
-  ```text
-  Installed PWA → Offline App Shell → Local WildStep Server → Local Ollama → Gemma
-  ```
-  If the host server or Ollama daemon is unreachable, the UI explicitly reports: *"Offline app shell active · Local AI connection unavailable"* or *"App shell available · Local AI server unreachable"*.
-* **Photo & API Privacy:**
-  - The service worker strictly bypasses all `POST` requests and `/api/*` endpoints.
-  - User photos submitted for verification are **never** stored in the service worker cache.
-  - Zero external cloud services, remote CDNs, or third-party storage buckets are utilized.
-* **Narrow Cache Scope & Versioning:** Obsolete caches matching `wildstep-*` are automatically pruned during service worker activation to ensure clean upgrades without stale asset drift.
+### Data Flow Audit
 
----
-
-## Live GPS Trail Mode
-
-WildStep AI turns every outdoor excursion into a recorded physical journey with **Live GPS Trail Mode**:
-
-> **"Your trail stays on this device."**
-
-* **100% Client-Side & Zero Remote Maps:** Does not use Google Maps, Leaflet, Mapbox, or remote map tile servers. Location coordinates are rendered directly on the device using an offline dynamic SVG projection.
-* **Conservative Walk Filtering:**
-  - Accuracy cutoff: coordinates with accuracy worse than 65 meters are discarded.
-  - Stationary jitter filtering: micro-movements under 2 meters are deduplicated to avoid distance drift when stopping to observe nature.
-  - Teleport / GPS jump rejection: sudden speed jumps exceeding 12 m/s over 30+ meters (e.g., cellular tower triangulation snaps) are rejected.
-* **Real-Time Walk Metrics:**
-  - Live distance formatted with human-friendly units (`842 m`, `1.4 km`) using Haversine calculation.
-  - Dynamic pace calculation (`MM:SS / km`) gated by minimum time and distance thresholds to avoid erratic initial estimates.
-* **Trail View Drawer:** A compact status pill in Field Mode (`● GPS ACTIVE`) with a slide-out vector trail drawer showing start marker, path polyline, and live position indicator.
-* **Strict Location Privacy:** GPS coordinates are never sent to Ollama, the WildStep server, cloud backends, or analytics. They are held in memory and local browser storage only.
-* **Interrupted Walk Recovery:** Unfinished walks are saved locally (`active_trail`), allowing users to seamlessly resume their trail or discard it upon reopening the app.
-* **Walk Completion Summary:** When all missions are finished or the walk is ended, an adventure summary dialog presents total distance, time elapsed, average pace, and the completed SVG trail map.
+| Data Stream | Handling & Destination | External Cloud / Network |
+|---|---|---|
+| **Camera Photos** | Processed in host RAM; downsampled locally for Gemma | **None** (never uploaded to cloud or CDNs) |
+| **GPS Coordinates** | Filtered and projected client-side into vector SVG | **None** (never sent to server, Ollama, or third parties) |
+| **AI Inference** | Executed purely on local Ollama daemon | **None** (100% open-weight local model) |
+| **Voice Guidance** | Synthesized using client browser SpeechSynthesis | **None** (device-native text-to-speech) |
+| **Live Trail** | Stored in browser `localStorage` on device | **None** (remains on client hardware) |
+| **Mapping Providers** | Dynamic SVG geometry computed mathematically | **None** (no Google Maps, Leaflet, Mapbox, or OSM tiles) |
+| **Analytics & Telemetry**| Zero tracking scripts, zero cookies, zero pixels | **None** |
 
 ---
 
-## Premium UI/UX Design System
+## Technical Highlights
 
-WildStep AI features a modern, tactile, outdoor-first interface designed for clarity under bright natural light and quick, glanceable operation:
+### 1. Artificial Intelligence & Local Vision
+- **Constrained Grammar Decoding:** Enforces strict JSON Schema compliance in Ollama to eliminate hallucinated formatting or markdown drift.
+- **Multimodal Scavenger Hunt Judge:** Prompted not for fragile fine-grained taxonomy, but as an impartial judge checking subject prominence, verifiable visual evidence, and clarity.
+- **Defensive Fallback Architecture:** If Ollama is offline or uninstalled, the system transitions gracefully to deterministic catalog missions with zero crashes.
 
-* **Nature × Adventure Aesthetic:** Deep forest emeralds (`#081107`, `#0f2410`), earth-toned neutrals (`#f4f6f0`), high-visibility sunlight neon green accents (`#4ade80`), and warm amber rewards (`#f59e0b`).
-* **Tactile Mobile Ergonomics:** 56px+ primary action touch targets, responsive card layouts, and hardware-safe-area padding (`env(safe-area-inset-top)`).
-* **Glanceable Live HUD:** Outdoor Field Mode features high-contrast typography, live status pill badges, elapsed walk timer, and real-time GPS distance/pace metrics.
-* **Zero External Dependencies:** Built with pure semantic HTML5, CSS3, and vanilla JavaScript. 100% self-contained with no external font or script CDN dependencies.
+### 2. Client-Side Geospatial Math
+- **Spherical Haversine Formulation:** Great-circle distance calculated on-device using precise Earth radius constants ($R = 6,371,000\text{m}$).
+- **Three-Tier GPS Quality Filter:** Discards readings with accuracy $> 65\text{m}$, deduplicates stationary jitter ($< 2\text{m}$), and drops cellular tower jumps ($> 12\text{m/s}$ over $> 30\text{m}$).
+- **Tile-Free SVG Vector Projection:** Normalizes geographic bounding boxes with Mercator latitude scaling ($k = \cos(\text{midLat})$) to render crisp vector trails without requesting a single map tile.
+
+### 3. Progressive Web App & Offline Architecture
+- **Cached Application Shell:** Service worker (`static/sw.js`) pre-caches core static assets for instant standalone boot without an active internet connection.
+- **Strict Privacy Isolation:** The service worker never caches user photos or `/api/*` endpoints.
 
 ---
 
-## Architecture
+## Full Architecture
 
 ```mermaid
 flowchart TD
@@ -318,99 +352,75 @@ flowchart TD
 
 ---
 
-## Privacy Architecture
+## Why Open Innovation Matters
 
-| Data Stream | Handling & Destination | External Cloud / Network |
-|---|---|---|
-| **Camera Photos** | Processed in host RAM; downsampled locally for Gemma | **None** (never uploaded to cloud or CDNs) |
-| **GPS Coordinates** | Filtered and projected client-side into vector SVG | **None** (never sent to server, Ollama, or third parties) |
-| **AI Inference** | Executed purely on local Ollama daemon | **None** (100% open-weight local model) |
-| **Voice Guidance** | Synthesized using client browser SpeechSynthesis | **None** (device-native text-to-speech) |
-| **Live Trail** | Stored in browser `localStorage` on device | **None** (remains on client hardware) |
-| **Mapping Providers** | Dynamic SVG geometry computed mathematically | **None** (no Google Maps, Leaflet, Mapbox, or OSM tiles) |
-| **Analytics & Telemetry**| Zero tracking scripts, zero cookies, zero pixels | **None** |
+WildStep AI is intentionally built with open-weight models and standard open web technologies:
+1. **User Ownership:** Outdoor exploration is personal. Your nature discoveries, walk times, and locations belong to you, not a cloud provider's training pipeline.
+2. **True Wilderness Resilience:** State parks, mountains, and forest trails often have limited or absent cellular coverage. Open-weight models running on local hardware ensure functionality without remote cloud reliance.
+3. **Transparency & Inspectability:** Every safety rule, image transform, and distance formula in WildStep is open, auditable, and reproducible.
+4. **Zero Marginal Cost:** Exploring outdoors should be free. Running local models eliminates token fees, API keys, and paywalls.
 
 ---
 
-## Data Persistence Audit
+## Product Screen Capture Guide
 
-WildStep AI maintains minimal local-first state without heavy external databases:
+When preparing pitch decks, hackathon submissions, or video demonstrations, capture these key application screens:
 
-| Storage Key / Location | Purpose | Format | Retention Policy |
-|---|---|---|---|
-| `localStorage['quest']` | Active mission card and walk start timestamp | JSON object | Persists until next mission is created |
-| `localStorage['active_trail']` | Live GPS points, distance, and walk recovery state | JSON array of `{lat, lon, accuracy, timestamp}` | Persists until walk is finished or discarded |
-| `localStorage['walk']` | Optional durable background walk ID (Temporal) | JSON object | Cleared when durable batch checking finishes |
-| Host `~/.wildstep-ai/walks/` *(optional)* | Photo cache for durable workflow resumes | Local JPEG + metadata JSON | Managed locally on disk when using Temporal |
+1. **Home / Hero Screen:** Showcase the clean brand bar, local AI status indicator, and Expedition Plan form.
+2. **Mission Generation Card:** Show the seasonal 6-objective scavenger hunt with point rewards and emoji markers.
+3. **Outdoor Field Mode HUD:** Display the sunlight-readable dark green HUD, active objective counter, and elapsed walk timer.
+4. **Live GPS Trail Drawer:** Show the real-time distance, pace meter, and mathematically projected SVG route drawer.
+5. **OLED Pocket Mode:** Demonstrate the pure `#000` screen lock with dim clock for pocket battery savings.
+6. **Camera Evidence Verification:** Capture the instant verification feedback showing detected evidence and points awarded.
+7. **Adventure Summary & Journal:** Display the walk completion dialog and the final chronological photo journal with route polyline.
 
 ---
 
-## Installation
+## Interview Talking Points
 
-### Prerequisites
-1. Python 3.10+ installed.
-2. [Ollama](https://ollama.com) installed and running locally.
+Concise, high-impact responses for technical questions:
 
-### Steps
+* **Why local AI instead of cloud models?**  
+  *Wilderness trails frequently have zero cellular connectivity, and personal outdoor journeys shouldn't require paying cloud API subscriptions. Local open-weight models bring intelligence directly to the edge.*
 
-```bash
-# 1. Pull the local open-weight vision model
-ollama pull gemma4:e2b
+* **Why Google's Gemma 4 E2B?**  
+  *Gemma 4 E2B provides an ideal balance of compact parameter size, low local resource footprint, and multimodal vision capabilities. It fits comfortably on consumer laptops and edge hardware while offering reliable instruction following.*
 
-# 2. Install required Python packages (Pillow)
-pip install -r requirements.txt
+* **Why not use Google Maps or Mapbox tiles?**  
+  *Remote mapping SDKs track user coordinates and require downloading megabytes of raster tiles that fail completely offline. WildStep's pure SVG engine projects coordinates into crisp vector polylines mathematically with zero network requests.*
 
-# 3. Start the WildStep AI server
-python server.py
+* **How do you guarantee physical safety?**  
+  *We never trust LLM output alone for physical safety. Deterministic regex rules intercept dangerous activities like cliff climbing or water entry, caution notices are automatically appended to fungi, and any flagged objective is replaced with a verified safe catalog item.*
+
+* **What happens if Ollama is not installed or crashes?**  
+  *WildStep degrades gracefully. The UI immediately reports offline status and switches to a deterministic built-in catalog of seasonal outdoor missions. The entire app—including camera, GPS, and journal—continues working without a hitch.*
+
+* **What was the hardest engineering challenge?**  
+  *Balancing multimodal vision accuracy with extreme privacy and zero latency. We solved this by prompting Gemma as an observational scavenger hunt judge focused on subject prominence rather than brittle taxonomy, backed by strict client-side GPS filtering to prevent distance drift.*
+
+* **What would you build next?**  
+  *On-device quantized audio generation for interactive nature soundscapes, and local peer-to-peer Bluetooth mesh syncing so walking groups can share trails without internet.*
+
+---
+
+## Automated Test Suite
+
+WildStep AI is backed by an automated, deterministic test suite:
+
+```powershell
+python -m pytest -q
 ```
 
-Open `http://127.0.0.1:8777` in your browser.
-
----
-
-## Configuration
-
-The application is configured using environment variables (`WILDSTEP_*` variables take primary precedence, with `QUEST_*` supported for backward compatibility):
-
-| Preferred Variable | Compatibility Fallback | Default | Description |
-|---|---|---|---|
-| `WILDSTEP_OLLAMA_URL` | `QUEST_OLLAMA_URL` | `http://127.0.0.1:11434` | URL of the local Ollama HTTP API |
-| `WILDSTEP_MODEL` | `QUEST_MODEL` | `gemma4:e2b` | Open-weight model tag pulled in Ollama |
-| `WILDSTEP_HOST` | `QUEST_HOST` | `127.0.0.1` | Host address to bind the HTTP server |
-| `WILDSTEP_PORT` | `QUEST_PORT` | `8777` | Port number for the HTTP server |
-| `WILDSTEP_TEMPORAL` | `QUEST_TEMPORAL` | `127.0.0.1:7233` | Host and port for optional local Temporal server |
-| `WILDSTEP_DATA` | `QUEST_DATA` | `~/.wildstep-ai` | Storage directory for durable walk caches (falls back to `~/.outside-quest` if present) |
-
----
-
-## Testing
-
-WildStep AI includes an automated, deterministic offline test suite covering core application logic:
-
-```bash
-# Run all tests
-pytest -q
-```
+**Result: 133 passed in ~10 seconds** (0 failures, 0 warnings).
 
 The test suite validates:
 - Deterministic outdoor safety filters and fallback generation (`tests/test_safety.py`)
-- EXIF parsing, coordinate extraction, and offline SVG route math (`tests/test_exif.py`, `tests/test_svg.py`)
-- Server request validation, fallback responses, and health endpoints (`tests/test_server.py`)
+- HTTP endpoints, headers, and request contracts (`tests/test_http_api.py`, `tests/test_server.py`)
+- EXIF parsing, coordinate extraction, and SVG route math (`tests/test_exif.py`, `tests/test_svg.py`)
 - Outdoor Field Mode, Pocket Mode, and voice guidance (`tests/test_field_mode.py`, `tests/test_voice_mode.py`)
 - PWA manifest, service worker caching, and offline app shell (`tests/test_pwa.py`)
 - Live GPS trail calculation, jitter filtering, jump rejection, and privacy (`tests/test_trail_mode.py`)
-
-No internet access, GPU, browser automation, or running Ollama instance is required to run the automated tests.
-
----
-
-## Safety
-
-WildStep AI enforces physical and observational safety using deterministic code rather than trusting raw model outputs:
-
-* **Deterministic Blacklist (`UNSAFE` regex):** Discards any mission objectives suggesting climbing, swimming, wading, entering water, touching wildlife, picking, eating, tasting, feeding, pursuing animals, trespassing, private property, night walks, or busy roads and railway tracks.
-* **Mandatory Caution Flags (`PHOTO_ONLY` regex):** Automatically appends `(photo only, don't touch)` to any mention of mushrooms, fungi, berries, nests, or eggs.
-* **Safe Fallback Pool (`SAFE_POOL`):** Any objective flagged by safety filtering or failed LLM responses is automatically replaced with proven, low-risk observation goals from a built-in safe catalog.
+- Deterministic Demo Runner pipeline (`tests/test_demo_runner.py`)
 
 ---
 
@@ -418,7 +428,7 @@ WildStep AI enforces physical and observational safety using deterministic code 
 
 WildStep AI is open-source software released under the **MIT License**.
 
-* **WildStep AI Code & Modifications:** Copyright (c) 2026 **Nainish Jaiswal**.
+* **WildStep AI Code & Architecture:** Copyright (c) 2026 **Nainish Jaiswal**.
 * **Third-Party Media:** Nature sample photographs from Wikimedia Commons under Creative Commons licenses.
 
 For complete license text, see [`LICENSE`](LICENSE).  

@@ -262,6 +262,17 @@ WildStep AI turns every outdoor excursion into a recorded physical journey with 
 
 ---
 
+## Premium UI/UX Design System
+
+WildStep AI features a modern, tactile, outdoor-first interface designed for clarity under bright natural light and quick, glanceable operation:
+
+* **Nature × Adventure Aesthetic:** Deep forest emeralds (`#081107`, `#0f2410`), earth-toned neutrals (`#f4f6f0`), high-visibility sunlight neon green accents (`#4ade80`), and warm amber rewards (`#f59e0b`).
+* **Tactile Mobile Ergonomics:** 56px+ primary action touch targets, responsive card layouts, and hardware-safe-area padding (`env(safe-area-inset-top)`).
+* **Glanceable Live HUD:** Outdoor Field Mode features high-contrast typography, live status pill badges, elapsed walk timer, and real-time GPS distance/pace metrics.
+* **Zero External Dependencies:** Built with pure semantic HTML5, CSS3, and vanilla JavaScript. 100% self-contained with no external font or script CDN dependencies.
+
+---
+
 ## Architecture
 
 ```mermaid

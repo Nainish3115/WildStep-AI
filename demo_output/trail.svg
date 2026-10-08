@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 200" class="trail-svg" role="img" aria-label="Simulated GPS Trail">
+  <rect width="100%" height="100%" fill="#111827" rx="8" />
+  <polyline points="87.4,51.1 118.2,78.3 138.8,127.1 164.6,159.7 221.2,176.0 267.5,138.0 272.6,83.7 231.5,24.0" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="87.4" cy="51.1" r="6" fill="#15803d" stroke="#86efac" stroke-width="2" />
+  <text x="95.4" y="55.1" fill="#86efac" font-size="10" font-weight="bold" font-family="sans-serif">START</text>
+  <circle cx="231.5" cy="24.0" r="8" fill="#facc15" stroke="#ffffff" stroke-width="2" />
+  <text x="241.5" y="28.0" fill="#facc15" font-size="11" font-weight="bold" font-family="sans-serif">YOU</text>
+</svg>

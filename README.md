@@ -63,6 +63,49 @@ Open **`http://127.0.0.1:8777`** in your browser.
 
 ---
 
+## Running the Deterministic Demo
+
+For interviews, automated evaluation, or local verification without walking outside, WildStep AI provides a **deterministic demo runner**:
+
+```bash
+python scripts/run_demo.py
+```
+
+### Why Demo Mode Exists
+- Demonstrates the complete end-to-end WildStep flow in seconds.
+- Does **not** require an active Ollama instance, GPU, internet connection, camera hardware, or physical outdoor movement.
+- Completely isolated: writes artifacts exclusively to `demo_output/` (`trail.svg`, `demo_journal.json`) without mutating real user data or production state.
+
+### Real vs. Simulated Components
+- **REAL (Production Logic Exercised):**
+  - Deterministic safety regex rules (`UNSAFE`, `PHOTO_ONLY`) and fallback pool swaps.
+  - Multi-objective photo verification schema constraints and scoring thresholds.
+  - Geolocation accuracy thresholds ($acc \le 65\text{m}$), stationary jitter deduplication ($< 2\text{m}$), and jump rejection ($> 12\text{m/s}$).
+  - Spherical Haversine distance calculation and gated pace formatting.
+  - Offline vector SVG projection with start marker, current position marker, and aspect ratio normalization.
+  - Local walk journal compilation.
+- **SIMULATED (Demonstration Fixtures):**
+  - Fixed GPS trail coordinates (scenic nature walk along Vetal Tekdi in Pune, Maharashtra).
+  - Deterministic image fixture (`samples/acridotheres-tristis.jpg`).
+  - Fixed demo timestamp (`2026-10-08T10:00:00Z`).
+  - Mocked open-weight LLM responses validating the exact JSON schema.
+
+---
+
+## Interview Showcase (3–5 Minute Walkthrough)
+
+When demonstrating WildStep AI in a technical interview:
+
+1. **The Problem (30s):** Outdoor apps often trap people into staring at screens, feeds, and inaccurate species classifiers while hiking. WildStep's philosophy is *"Prepare on the screen. Listen to the mission. Put the phone away. Touch grass."*
+2. **Local AI Architecture (30s):** Explain that WildStep runs entirely offline on-device with open-weight Gemma via local Ollama. Zero cloud APIs, zero subscription fees.
+3. **Execute the Demo (30s):** Run `python scripts/run_demo.py` in the terminal to showcase the full pipeline synchronously.
+4. **Safety Pipeline (45s):** Point out how AI suggestions are never trusted blindly; deterministic code flags unsafe activities (cliffs, climbing, water, wildlife touching) and appends caution warnings to mushrooms or berries.
+5. **Local Evidence Verification (45s):** Explain that the local multimodal judge requires both `is_main_subject=True` and concrete evidence descriptions to award points, preventing background noise from scoring.
+6. **Privacy-First GPS (45s):** Highlight Live GPS Trail Mode: coordinates are filtered and projected into vector SVGs purely on the device. Coordinates are never sent in HTTP request bodies or LLM prompts.
+7. **PWA & Field Mode (30s):** Show that WildStep installs as a standalone PWA with an offline app shell, spoken voice guidance, and OLED Pocket Mode.
+
+---
+
 ## What is WildStep AI?
 
 WildStep AI turns outdoor walks into focused real-world discovery sessions without screen addiction. The verified application workflow operates as follows:

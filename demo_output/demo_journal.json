@@ -1,0 +1,22 @@
+{
+  "demo": true,
+  "timestamp": "2026-10-08T10:00:00Z",
+  "location": "Vetal Tekdi, Pune, Maharashtra",
+  "mission_title": "Vetal Hill Nature Trail",
+  "completed_objectives": [
+    {
+      "id": "q1",
+      "text": "A bird resting on a tree branch",
+      "points": 15,
+      "evidence": "A clear brown bird is the primary and central subject of the photo."
+    }
+  ],
+  "stats": {
+    "distance_metres": 781.5,
+    "distance_formatted": "782 m",
+    "elapsed": "09:20",
+    "pace": "11:56 / km",
+    "trail_points": 8
+  },
+  "privacy": "100% Local \u00b7 No cloud telemetry"
+}

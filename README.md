@@ -69,6 +69,7 @@ WildStep AI is architected from the ground up to operate without an active inter
 
 ## Current Features
 
+* **Outdoor Field Mode:** A dedicated, high-contrast, sunlight-readable, zero-scrolling UI for in-field exploration. Features direct camera capture, haptic feedback, auto-advance, walk timer, and an OLED Pocket Mode screen lock.
 * **Contextual Mission Synthesis:** Synthesizes balanced 6-objective outdoor scavenger missions tailored to season, biome, and walking companions.
 * **Instant Fallback Missions:** Instant non-LLM mission generation sourced from a curated internal safe pool.
 * **Phone Away Mode:** Dedicated full-screen focus overlay recording start time and discouraging in-walk screen usage.
@@ -77,6 +78,46 @@ WildStep AI is architected from the ground up to operate without an active inter
 * **Offline Vector Route Map:** Plots walk path geometry and calculates total distance between photographic waypoints using pure mathematical SVG.
 * **Chronological Walk Journal:** Visual timeline organizing photographs, capture times, verified mission badges, and missing metadata warnings.
 * **Optional Durable Execution (Temporal):** Optional fault-tolerant batch photo processing backed by an embedded local Temporal dev server, allowing browser tabs to close during long verification batches.
+
+---
+
+## Outdoor Field Mode
+
+Outdoor Field Mode implements WildStep AI's core philosophy: **"Prepare on the screen. Then put the phone away."**
+
+When walking outdoors, users need minimal screen interaction, maximum sunlight legibility, and zero distractions:
+
+* **Sunlight-Readable High-Contrast Design:** Glare-resistant dark green/black canvas (`#081107`) with neon status accents (`#4ade80`) and oversized typography legible even in harsh outdoor sunlight.
+* **Zero Scrolling Layout:** Single-screen viewport layout (`100dvh`) with safe-area insets (`env(safe-area-inset-*)`) and touch-optimized controls ($\ge 48\text{px}$ touch targets).
+* **Focused Single-Mission View:** Displays one objective at a time (e.g. `MISSION 2 OF 6 · 150 PTS`, large emoji, objective description) with simple Previous/Next navigation.
+* **Direct Native Camera Capture:** Integrated `<input type="file" accept="image/*" capture="environment">` directly launches the phone camera without file picker detours.
+* **Immediate Local Verification & Haptics:** Snapped evidence is sent directly to the local `/api/check` vision pipeline. Provides dual-pulse success haptics (`navigator.vibrate`) on verification and informative retry guidance when objectives are not detected.
+* **Auto-Progression:** Automatically advances to the next unfinished outdoor objective upon successful verification.
+* **OLED Pocket Mode:** One-tap screen lock that drops display output to pure `#000` black with a dim clock, eliminating accidental touches inside pockets and maximizing battery life on OLED panels.
+* **Elapsed Walk Timer:** Tracks active outdoor exploration duration continuously across mode switches.
+
+---
+
+## Voice-First Field Mode
+
+WildStep AI expands the outdoor experience with **Voice-First Field Mode**, designed around the expanded philosophy:
+
+> **"Prepare on the screen. Listen to the mission. Put the phone away. Touch grass."**
+
+Voice guidance allows users to keep their eyes up and phones in their pockets throughout exploration:
+
+* **100% Local Native Speech Synthesis:** Powered entirely by the client browser's native `window.speechSynthesis` and `SpeechSynthesisUtterance`. Zero remote TTS APIs (no ElevenLabs, Google Cloud, Azure, or OpenAI speech services), zero audio files, and zero external CDNs.
+* **Spoken Mission Announcements:** Concisely announces the active objective (e.g., *"Mission one. Find a leaf larger than your hand."*) without reading technical metadata, points, or verbose model instructions.
+* **In-Pocket Verification Audio:** Provides immediate spoken feedback after photo capture:
+  - **Success:** *"Mission complete. Nice find. Next mission. [Next objective]."*
+  - **Retry Guidance:** *"Not enough evidence. AI saw [observation]. Try another photo."*
+  - **Walk Completion:** *"Walk complete. You finished all six missions."*
+* **Seamless Pocket Mode Integration:** Operates together with OLED Pocket Mode so users can hear mission updates and capture feedback without taking the phone out to inspect the screen.
+* **Speech Queue Management & Sanitization:** Automatically cancels in-progress speech when new events trigger to prevent audio overlap. All spoken text is sanitized to strip HTML, JSON, raw prompts, and runaway LLM reasoning.
+* **Autoplay & Permission Safety:** Voice is disabled by default to respect browser autoplay policies; enabling it requires an explicit user gesture (`🔊 Voice On`).
+* **Graceful Degradation:** When `window.speechSynthesis` is unavailable (e.g. specialized mobile browsers, headless environments), voice controls clearly indicate `🔇 Voice N/A` and all visual/haptic features continue functioning completely without degradation.
+
+*(Note: Voice availability depends on client browser and operating system support for the Web Speech API. Modern desktop and mobile browsers like Chrome, Edge, Safari, and Firefox support speech synthesis, though voice accents and system audio policies may vary by OS).*
 
 ---
 

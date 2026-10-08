@@ -49,7 +49,218 @@
   svg { display:block; width:100%; max-height:260px; background:var(--leaf2); border-radius:12px; }
   .badges span { display:inline-block; background:var(--sun); border-radius:999px; padding:4px 12px; margin:4px 6px 0 0; font-weight:700; font-size:.9rem; }
   footer { color:var(--muted); font-size:.85rem; text-align:center; margin-top:20px; }
-  @media print { body { background:#fff; } .noprint, footer, #back, #journal { display:none !important; } .card { border:2px solid #000; } }
+
+  /* Outdoor Field Mode — high contrast, sunlight-readable, zero-scroll */
+  #fieldMode {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: #081107;
+    color: #f3f6ee;
+    padding: max(16px, env(safe-area-inset-top, 16px)) max(16px, env(safe-area-inset-right, 16px)) max(16px, env(safe-area-inset-bottom, 16px)) max(16px, env(safe-area-inset-left, 16px));
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  .field-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #1f381c;
+    flex: 0 0 auto;
+  }
+  .field-timer {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 1.15rem;
+    color: #4ade80;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .field-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 12px 4px;
+    gap: 10px;
+    overflow: hidden;
+  }
+  .field-counter {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #86efac;
+    font-weight: 700;
+  }
+  .field-emoji {
+    font-size: clamp(3.5rem, 14vw, 5.5rem);
+    line-height: 1;
+    margin: 2px 0;
+    filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6));
+  }
+  .field-text {
+    font-size: clamp(1.2rem, 5vw, 1.65rem);
+    font-weight: 700;
+    line-height: 1.25;
+    color: #ffffff;
+    max-width: 92%;
+    word-break: break-word;
+  }
+  .field-status-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+  .field-status-badge.pending {
+    background: #142a12;
+    color: #86efac;
+    border: 1px solid #2f6b2a;
+  }
+  .field-status-badge.done {
+    background: #4ade80;
+    color: #052e16;
+    border: 1px solid #86efac;
+  }
+  .field-feedback {
+    min-height: 48px;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    padding: 8px 12px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 440px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: rgba(255,255,255,0.06);
+    color: #d1d5db;
+    border: 1px solid #1f381c;
+  }
+  .field-feedback.success {
+    background: #064e3b;
+    color: #a7f3d0;
+    border: 1px solid #10b981;
+    font-weight: 600;
+  }
+  .field-feedback.warn {
+    background: #3b1c09;
+    color: #fde68a;
+    border: 1px solid #d97706;
+  }
+  .field-feedback.loading {
+    background: #0f2d42;
+    color: #93c5fd;
+    border: 1px solid #3b82f6;
+  }
+  .field-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 8px;
+    flex: 0 0 auto;
+  }
+  .field-nav-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+  .field-nav-btn {
+    flex: 1;
+    min-height: 48px;
+    background: #162a14;
+    color: #d1fae5;
+    border: 1px solid #2f6b2a;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .field-nav-btn:active {
+    background: #244621;
+  }
+  .field-nav-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .field-capture-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 56px;
+    background: #4ade80;
+    color: #052e16;
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    border-radius: 14px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(74, 222, 128, 0.35);
+    border: none;
+    box-sizing: border-box;
+    touch-action: manipulation;
+  }
+  .field-capture-btn:active {
+    background: #22c55e;
+    transform: scale(0.98);
+  }
+  .field-capture-btn.disabled {
+    background: #374151;
+    color: #9ca3af;
+    cursor: wait;
+    box-shadow: none;
+    pointer-events: none;
+  }
+  #pocketOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    color: #4b5563;
+    z-index: 200;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  #pocketOverlay .pocket-clock {
+    font-size: 3.2rem;
+    color: #1f2937;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  #pocketOverlay .pocket-hint {
+    font-size: 1.1rem;
+    color: #374151;
+    line-height: 1.5;
+  }
+  #fieldVoiceBtn[aria-pressed="true"] {
+    background: #064e3b;
+    border-color: #10b981;
+    color: #a7f3d0;
+  }
+  @media print { body { background:#fff; } .noprint, footer, #back, #journal, #fieldMode, #pocketOverlay { display:none !important; } .card { border:2px solid #000; } }
 </style>
 </head>
 <body>
@@ -77,6 +288,7 @@
     <p class="status">Find each one and take a photo. That's all you need the phone for.</p>
     <div class="row noprint">
       <button id="go">I'm heading out →</button>
+      <button id="openField" style="background:#1b4317">🥾 Outdoor Field Mode</button>
       <button class="ghost" onclick="window.print()">Print mission card</button>
     </div>
   </section>
@@ -108,7 +320,47 @@
   <p>Your mission started at <strong id="startAt"></strong>.</p>
   <p id="awayList"></p>
   <p>Only take it out to snap a photo. See you in an hour.</p>
-  <button id="home">I'm back</button>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <button id="awayField" style="background:#fff;color:var(--leaf);font-weight:700">🥾 Open Field Mode</button>
+    <button id="home">I'm back</button>
+  </div>
+</div>
+
+<div id="fieldMode" role="region" aria-label="Outdoor Field Mode">
+  <div class="field-header">
+    <button id="fieldExitBtn" class="field-nav-btn" style="flex:0 0 auto">✕ Exit</button>
+    <div id="fieldTimer" class="field-timer" title="Elapsed walk time">00:00</div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button id="fieldVoiceBtn" class="field-nav-btn" style="flex:0 0 auto" aria-label="Toggle voice guidance" aria-pressed="false" title="Spoken mission guidance">🔇 Voice Off</button>
+      <button id="fieldPocketBtn" class="field-nav-btn" style="flex:0 0 auto">🌙 Pocket</button>
+    </div>
+  </div>
+
+  <div class="field-body">
+    <div id="fieldProgressText" class="field-counter">MISSION 1 OF 6</div>
+    <div id="fieldEmoji" class="field-emoji" aria-hidden="true">🌱</div>
+    <div id="fieldText" class="field-text">Finding target...</div>
+    <div id="fieldStatus" class="field-status-badge pending">NOT FOUND</div>
+    <div id="fieldFeedback" class="field-feedback" role="status" aria-live="polite">
+      Tap camera below to capture evidence
+    </div>
+  </div>
+
+  <div class="field-footer">
+    <div class="field-nav-row">
+      <button id="fieldPrev" class="field-nav-btn" aria-label="Previous mission">◀ Prev</button>
+      <button id="fieldNext" class="field-nav-btn" aria-label="Next mission">Next ▶</button>
+    </div>
+    <label for="fieldCamera" id="fieldCaptureLabel" class="field-capture-btn">
+      <span aria-hidden="true">📷</span> <span>SNAP EVIDENCE</span>
+    </label>
+    <input type="file" id="fieldCamera" accept="image/*" capture="environment" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;">
+  </div>
+</div>
+
+<div id="pocketOverlay" role="dialog" aria-label="Pocket Mode Screen Lock">
+  <div id="pocketClock" class="pocket-clock">00:00</div>
+  <div class="pocket-hint">Phone away in pocket 🌲<br><br><span id="pocketVoiceNote" style="font-size:0.95rem;color:#4ade80;display:none">🔊 Spoken missions active<br><br></span><span style="font-size:0.95rem;color:#6b7280">Tap anywhere to wake screen</span></div>
 </div>
 
 <script>
@@ -164,13 +416,329 @@
     card = await r.json(); results = []; store.set('quest', { card, startedAt: null }); renderCard(); $('journal').style.display = 'none';
   });
 
+  let currentMissionIdx = 0, walkStartMs = null, walkTimerInterval = null, voiceEnabled = false;
+
+  const ORDINALS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+
+  const voice = {
+    supported() {
+      return typeof window !== 'undefined' && 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
+    },
+    stop() {
+      if (this.supported()) {
+        try { window.speechSynthesis.cancel(); } catch {}
+      }
+    },
+    sanitize(text) {
+      if (!text || typeof text !== 'string') return '';
+      // Strip HTML tags
+      let clean = text.replace(/<[^>]*>/g, ' ');
+      // Strip common JSON brackets and quotes if model output contains raw formatting
+      clean = clean.replace(/[{}\[\]"]/g, ' ');
+      // Normalize whitespace
+      clean = clean.replace(/\s+/g, ' ').trim();
+      // Length cutoff to prevent long model rambling or prompt injections
+      if (clean.length > 140) {
+        clean = clean.slice(0, 140).trim() + '...';
+      }
+      return clean;
+    },
+    speak(text, onEnd) {
+      if (!voiceEnabled || !this.supported() || !text) return;
+      this.stop();
+      try {
+        const clean = this.sanitize(text);
+        if (!clean) return;
+        const u = new SpeechSynthesisUtterance(clean);
+        u.lang = 'en-US';
+        u.rate = 1.0;
+        u.pitch = 1.0;
+        u.volume = 1.0;
+        if (typeof onEnd === 'function') {
+          u.onend = onEnd;
+        }
+        u.onerror = (e) => {
+          if (e && e.error === 'not-allowed') {
+            const fb = $('fieldFeedback');
+            if (fb) fb.textContent = 'Voice ready — tap screen to enable spoken missions.';
+          }
+        };
+        window.speechSynthesis.speak(u);
+      } catch (err) {}
+    }
+  };
+
+  function updateVoiceButtonState() {
+    const btn = $('fieldVoiceBtn');
+    const note = $('pocketVoiceNote');
+    if (!btn) return;
+    if (!voice.supported()) {
+      btn.disabled = true;
+      btn.textContent = '🔇 Voice N/A';
+      btn.setAttribute('aria-label', 'Voice guidance unavailable on this device');
+      btn.setAttribute('aria-pressed', 'false');
+      btn.title = 'Speech synthesis is not supported by your browser';
+      if (note) note.style.display = 'none';
+      return;
+    }
+    if (voiceEnabled) {
+      btn.disabled = false;
+      btn.textContent = '🔊 Voice On';
+      btn.setAttribute('aria-label', 'Disable voice guidance (currently on)');
+      btn.setAttribute('aria-pressed', 'true');
+      btn.title = 'Voice guidance is active. Tap to turn off.';
+      if (note) note.style.display = 'inline';
+    } else {
+      btn.disabled = false;
+      btn.textContent = '🔇 Voice Off';
+      btn.setAttribute('aria-label', 'Enable voice guidance (currently off)');
+      btn.setAttribute('aria-pressed', 'false');
+      btn.title = 'Voice guidance is off. Tap to turn on.';
+      if (note) note.style.display = 'none';
+    }
+  }
+
+  function announceMission(idx) {
+    if (!card || !card.quests || idx < 0 || idx >= card.quests.length) return;
+    const num = ORDINALS[idx] || (idx + 1);
+    const q = card.quests[idx];
+    const text = voice.sanitize(q.text);
+    voice.speak(`Mission ${num}. ${text}`);
+  }
+
+  function toggleVoice() {
+    if (!voice.supported()) return;
+    voiceEnabled = !voiceEnabled;
+    updateVoiceButtonState();
+    if (voiceEnabled) {
+      announceMission(currentMissionIdx);
+    } else {
+      voice.stop();
+    }
+  }
+
+  function triggerHaptic(pattern) {
+    try {
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function') {
+        navigator.vibrate(pattern);
+      }
+    } catch {}
+  }
+
+  function formatElapsed(ms) {
+    const totalSec = Math.max(0, Math.floor(ms / 1000));
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  function startWalkTimer() {
+    if (!walkStartMs) {
+      walkStartMs = Date.now();
+      if (card) store.set('quest', { card, startedAt: new Date(walkStartMs).toISOString() });
+    }
+    if (walkTimerInterval) clearInterval(walkTimerInterval);
+    const update = () => {
+      const elapsed = Date.now() - walkStartMs;
+      const str = formatElapsed(elapsed);
+      const timerEl = $('fieldTimer');
+      const pocketClockEl = $('pocketClock');
+      if (timerEl) timerEl.textContent = str;
+      if (pocketClockEl) pocketClockEl.textContent = str;
+    };
+    update();
+    walkTimerInterval = setInterval(update, 1000);
+  }
+
+  function updateFieldModeView() {
+    if (!card || !card.quests || !card.quests.length) return;
+    const total = card.quests.length;
+    if (currentMissionIdx < 0) currentMissionIdx = 0;
+    if (currentMissionIdx >= total) currentMissionIdx = total - 1;
+    const q = card.quests[currentMissionIdx];
+    const doneIds = new Set(results.flatMap(r => r.completed.map(c => c.id)));
+    const isDone = doneIds.has(q.id);
+
+    $('fieldProgressText').textContent = `MISSION ${currentMissionIdx + 1} OF ${total} · ${q.points} PTS`;
+    $('fieldEmoji').textContent = q.emoji;
+    $('fieldText').textContent = q.text;
+
+    if (isDone) {
+      $('fieldStatus').textContent = '✓ COMPLETED';
+      $('fieldStatus').className = 'field-status-badge done';
+    } else {
+      $('fieldStatus').textContent = 'PENDING';
+      $('fieldStatus').className = 'field-status-badge pending';
+    }
+
+    $('fieldPrev').disabled = currentMissionIdx === 0;
+    $('fieldNext').disabled = currentMissionIdx === total - 1;
+  }
+
+  function advanceToNextUnfinished() {
+    if (!card || !card.quests) return;
+    const doneIds = new Set(results.flatMap(r => r.completed.map(c => c.id)));
+    for (let offset = 1; offset < card.quests.length; offset++) {
+      const idx = (currentMissionIdx + offset) % card.quests.length;
+      if (!doneIds.has(card.quests[idx].id)) {
+        currentMissionIdx = idx;
+        updateFieldModeView();
+        return;
+      }
+    }
+    updateFieldModeView();
+  }
+
+  function openFieldMode(idx) {
+    if (!card || !card.quests || card.quests.length === 0) return;
+    $('away').style.display = 'none';
+    $('fieldMode').style.display = 'flex';
+    const doneIds = new Set(results.flatMap(r => r.completed.map(c => c.id)));
+    if (typeof idx === 'number' && idx >= 0 && idx < card.quests.length) {
+      currentMissionIdx = idx;
+    } else {
+      const firstUncompleted = card.quests.findIndex(q => !doneIds.has(q.id));
+      currentMissionIdx = firstUncompleted !== -1 ? firstUncompleted : 0;
+    }
+    startWalkTimer();
+    updateVoiceButtonState();
+    updateFieldModeView();
+    if (voiceEnabled) announceMission(currentMissionIdx);
+  }
+
+  function closeFieldMode() {
+    voice.stop();
+    $('fieldMode').style.display = 'none';
+    $('pocketOverlay').style.display = 'none';
+    renderCard();
+    if (results.length) renderJournal();
+  }
+
+  $('openField').addEventListener('click', () => openFieldMode());
+  $('awayField').addEventListener('click', () => openFieldMode());
+  $('fieldExitBtn').addEventListener('click', closeFieldMode);
+  $('fieldVoiceBtn').addEventListener('click', toggleVoice);
+  $('fieldPocketBtn').addEventListener('click', () => { $('pocketOverlay').style.display = 'flex'; });
+  $('pocketOverlay').addEventListener('click', () => { $('pocketOverlay').style.display = 'none'; });
+  $('fieldPrev').addEventListener('click', () => {
+    if (currentMissionIdx > 0) {
+      currentMissionIdx--;
+      updateFieldModeView();
+      if (voiceEnabled) announceMission(currentMissionIdx);
+    }
+  });
+  $('fieldNext').addEventListener('click', () => {
+    if (card && currentMissionIdx < card.quests.length - 1) {
+      currentMissionIdx++;
+      updateFieldModeView();
+      if (voiceEnabled) announceMission(currentMissionIdx);
+    }
+  });
+
   $('go').addEventListener('click', () => {
     const t = new Date(); store.set('quest', { card, startedAt: t.toISOString() });
+    walkStartMs = t.getTime();
+    startWalkTimer();
     $('startAt').textContent = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     $('awayList').textContent = card.quests.map(q => q.emoji).join('  ');
     $('away').style.display = 'block'; $('home').focus();
   });
   $('home').addEventListener('click', () => { $('away').style.display = 'none'; $('photos').focus(); });
+
+  $('fieldCamera').addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!file || !card) return;
+
+    $('fieldCaptureLabel').classList.add('disabled');
+    $('fieldFeedback').className = 'field-feedback loading';
+    $('fieldFeedback').textContent = 'Analyzing photo locally with AI… (~30s)';
+
+    try {
+      const imgData = await readFile(file);
+      const d = await post('/api/check', { quests: card.quests, image: imgData });
+      if (d.error) {
+        $('fieldFeedback').className = 'field-feedback warn';
+        $('fieldFeedback').textContent = 'Error: ' + d.error;
+        triggerHaptic([100]);
+        voice.speak('Verification error. Try another photo.');
+        return;
+      }
+
+      results.push({ ...d, name: file.name || 'field_photo.jpg', fallbackTime: file.lastModified || Date.now() });
+      renderCard();
+      renderJournal();
+
+      const curQuest = card.quests[currentMissionIdx];
+      const matchCur = d.completed && d.completed.find(c => c.id === curQuest.id);
+      const doneIds = new Set(results.flatMap(r => r.completed.map(c => c.id)));
+      const allCompleted = card.quests.every(q => doneIds.has(q.id));
+
+      if (allCompleted) {
+        triggerHaptic([100, 50, 100, 50, 300]);
+        $('fieldFeedback').className = 'field-feedback success';
+        const totalCount = card.quests.length;
+        const numWord = ORDINALS[totalCount - 1] || totalCount;
+        $('fieldFeedback').textContent = `🏆 Walk complete! All ${totalCount} missions finished!`;
+        updateFieldModeView();
+        voice.speak(`Walk complete. You finished all ${numWord} missions.`);
+      } else if (matchCur) {
+        triggerHaptic([100, 50, 200]);
+        $('fieldFeedback').className = 'field-feedback success';
+        $('fieldFeedback').textContent = `✓ Found! +${curQuest.points} pts: ${matchCur.evidence || curQuest.text}`;
+        updateFieldModeView();
+
+        let nextIdx = -1;
+        for (let offset = 1; offset < card.quests.length; offset++) {
+          const idx = (currentMissionIdx + offset) % card.quests.length;
+          if (!doneIds.has(card.quests[idx].id)) {
+            nextIdx = idx;
+            break;
+          }
+        }
+        if (nextIdx !== -1) {
+          const nextQuest = card.quests[nextIdx];
+          const nextText = voice.sanitize(nextQuest.text);
+          voice.speak(`Mission complete. Nice find. Next mission. ${nextText}`);
+          setTimeout(() => {
+            advanceToNextUnfinished();
+          }, 1800);
+        } else {
+          voice.speak('Mission complete. Nice find.');
+        }
+      } else if (d.completed && d.completed.length > 0) {
+        triggerHaptic([100, 50, 150]);
+        const otherMatch = d.completed[0];
+        const otherQuest = card.quests.find(q => q.id === otherMatch.id);
+        const name = otherQuest ? otherQuest.text : 'objective';
+        $('fieldFeedback').className = 'field-feedback success';
+        $('fieldFeedback').textContent = `✓ Completed another objective: "${name}"!`;
+        updateFieldModeView();
+        const cleanName = voice.sanitize(name);
+        voice.speak(`Objective complete. ${cleanName}.`);
+      } else {
+        triggerHaptic([150]);
+        $('fieldFeedback').className = 'field-feedback warn';
+        const rawSee = d.what_i_see || '';
+        const cleanSee = voice.sanitize(rawSee);
+        const see = cleanSee ? `AI saw: "${cleanSee}"` : 'Target not detected';
+        $('fieldFeedback').textContent = `${see}. Keep exploring!`;
+
+        if (cleanSee && cleanSee.length <= 40) {
+          voice.speak(`Not enough evidence. AI saw ${cleanSee}. Try another photo.`);
+        } else {
+          voice.speak('Not enough evidence. Try another photo.');
+        }
+      }
+    } catch (err) {
+      $('fieldFeedback').className = 'field-feedback warn';
+      $('fieldFeedback').textContent = 'Check failed: ' + err;
+      triggerHaptic([100]);
+      voice.speak('Verification error. Try another photo.');
+    } finally {
+      $('fieldCaptureLabel').classList.remove('disabled');
+    }
+  });
 
   let durable = false;
   const readFile = (f) => new Promise(res => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(f); });
@@ -261,7 +829,11 @@
   }
 
   const saved = store.get('quest');
-  if (saved && saved.card) { card = saved.card; renderCard(); }
+  if (saved && saved.card) {
+    card = saved.card;
+    if (saved.startedAt) walkStartMs = new Date(saved.startedAt).getTime();
+    renderCard();
+  }
   const walk = store.get('walk');
   if (walk && walk.id) { card = walk.card; renderCard(); pollWalk(walk.id); }
 </script>

@@ -1,0 +1,10 @@
+Title: Common Poppy (Papaver rhoeas), Thasos, Greece
+File: red_flower_evidence.jpg
+Original Source URL: https://commons.wikimedia.org/wiki/File:Papaver_rhoeas_LC0050.jpg
+Direct Download URL: https://upload.wikimedia.org/wikipedia/commons/c/cb/Papaver_rhoeas_LC0050.jpg
+Author / Creator: Jörg Hempel (User:LC-de on Wikimedia Commons)
+License: Creative Commons Attribution-Share Alike 2.5 Generic (CC BY-SA 2.5)
+License URL: https://creativecommons.org/licenses/by-sa/2.5/
+Attribution text: "Papaver rhoeas LC0050.jpg" by Jörg Hempel, licensed under CC BY-SA 2.5.
+Assessment: Wikimedia Commons Quality Image.
+Usage context: Demonstration evidence asset for WildStep AI offline verification showcase ("Something bright red in nature").

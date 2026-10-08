@@ -1,0 +1,269 @@
+<!doctype html>
+<!--
+  WildStep AI — Local AI. Real-world missions. Zero scrolling.
+  Developer & Maintainer: Nainish Jaiswal <nainish.official@gmail.com>
+  Licensed under the MIT License. See LICENSE for details.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="WildStep AI is an offline-first outdoor companion powered by local open-weight AI. It prepares personalized real-world missions, helps verify discoveries, and creates a local adventure journal — with zero scrolling.">
+<meta name="application-name" content="WildStep AI">
+<meta property="og:title" content="WildStep AI">
+<meta property="og:description" content="Local AI. Real-world missions. Zero scrolling.">
+<title>WildStep AI — Local AI. Real-world missions. Zero scrolling.</title>
+<style>
+  :root { --bg:#f3f6ee; --card:#fff; --ink:#1d2a1b; --muted:#5d6b59; --leaf:#2f6b2a; --leaf2:#e4f0dd; --sun:#f2b632; --line:#d9e3d2; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family: system-ui, "Noto Sans", sans-serif; background:var(--bg); color:var(--ink); font-size:18px; line-height:1.5; }
+  main { max-width:760px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:2rem; margin:0; }
+  .tag { color:var(--muted); margin:2px 0 18px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; margin-bottom:16px; }
+  .step { font-weight:700; color:var(--leaf); text-transform:uppercase; letter-spacing:.05em; font-size:.8rem; }
+  input[type=text] { font:inherit; width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  .row > * { flex:1 1 220px; }
+  button { font:inherit; font-weight:700; border:0; border-radius:12px; padding:12px 18px; cursor:pointer; background:var(--leaf); color:#fff; }
+  button.ghost { background:#fff; color:var(--leaf); border:2px solid var(--leaf); }
+  button:disabled { opacity:.6; cursor:wait; }
+  .status { font-size:.85rem; color:var(--muted); }
+  .status.bad { color:#a40000; }
+  #questCard h2 { margin:.2em 0 .6em; }
+  .quest { display:flex; align-items:center; gap:12px; padding:10px 12px; border:2px dashed var(--line); border-radius:12px; margin-bottom:8px; }
+  .quest .e { font-size:1.6rem; width:2rem; text-align:center; }
+  .quest .t { flex:1; }
+  .quest .p { font-weight:700; color:var(--leaf); }
+  .quest.done { border-style:solid; border-color:var(--leaf); background:var(--leaf2); }
+  .quest img { width:56px; height:56px; object-fit:cover; border-radius:8px; }
+  .quest .ev { display:block; font-size:.8rem; color:var(--muted); }
+  #away { display:none; position:fixed; inset:0; background:var(--leaf); color:#fff; text-align:center; padding:12vh 24px; z-index:5; }
+  #away h2 { font-size:2.2rem; margin:0 0 12px; }
+  #away p { font-size:1.2rem; }
+  #away button { background:#fff; color:var(--leaf); margin-top:24px; }
+  .score { font-size:2.2rem; font-weight:800; color:var(--leaf); }
+  .journal-item { display:flex; gap:12px; padding:10px 0; border-top:1px solid var(--line); }
+  .journal-item img { width:96px; height:96px; object-fit:cover; border-radius:10px; flex:none; }
+  .time { font-weight:700; }
+  svg { display:block; width:100%; max-height:260px; background:var(--leaf2); border-radius:12px; }
+  .badges span { display:inline-block; background:var(--sun); border-radius:999px; padding:4px 12px; margin:4px 6px 0 0; font-weight:700; font-size:.9rem; }
+  footer { color:var(--muted); font-size:.85rem; text-align:center; margin-top:20px; }
+  @media print { body { background:#fff; } .noprint, footer, #back, #journal { display:none !important; } .card { border:2px solid #000; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>WildStep AI 🌿</h1>
+  <p class="tag">Local AI. Real-world missions. Zero scrolling. An offline-first outdoor companion powered by local open-weight AI.</p>
+  <p id="health" class="status noprint" role="status">Checking the local model…</p>
+
+  <section class="card noprint" id="setup">
+    <div class="step">Before you go</div>
+    <div class="row" style="margin:10px 0">
+      <label>Where are you walking? <input type="text" id="place" placeholder="e.g. Ambazari lake, Nagpur"></label>
+      <label>Who's going? <input type="text" id="who" placeholder="e.g. me and my 8-year-old"></label>
+    </div>
+    <div class="row" style="flex-wrap:wrap">
+      <button id="make">Generate Mission</button>
+      <button id="quick" class="ghost">Quick Mission (instant)</button>
+    </div>
+  </section>
+
+  <section class="card" id="questCard" style="display:none">
+    <div class="step">Your mission · <span id="month"></span></div>
+    <h2 id="title"></h2>
+    <div id="quests"></div>
+    <p class="status">Find each one and take a photo. That's all you need the phone for.</p>
+    <div class="row noprint">
+      <button id="go">I'm heading out →</button>
+      <button class="ghost" onclick="window.print()">Print mission card</button>
+    </div>
+  </section>
+
+  <section class="card noprint" id="back" style="display:none">
+    <div class="step">Back from the walk?</div>
+    <p style="margin:6px 0 12px">Add the photos you took. Your mission is verified locally on this computer.</p>
+    <label for="photos" style="display:block;font-weight:600;margin-bottom:6px">Your walk photos</label>
+    <input type="file" id="photos" accept="image/*" multiple>
+    <p id="progress" class="status" aria-live="polite"></p>
+    <div id="result" style="display:none">
+      <div class="score"><span id="score">0</span> pts</div>
+      <div class="badges" id="badges"></div>
+    </div>
+  </section>
+
+  <section class="card noprint" id="journal" style="display:none">
+    <div class="step">Walk journal</div>
+    <p id="summary" style="margin:6px 0"></p>
+    <div id="map"></div>
+    <div id="entries"></div>
+  </section>
+
+  <footer>WildStep AI · Runs local open-weight AI with Ollama. Photos never leave this computer. Look, don't touch: never pick or eat wild plants or mushrooms, and give animals space.</footer>
+</main>
+
+<div id="away" role="dialog" aria-modal="true" aria-labelledby="awayTitle">
+  <h2 id="awayTitle">Phone away 🌳</h2>
+  <p>Your mission started at <strong id="startAt"></strong>.</p>
+  <p id="awayList"></p>
+  <p>Only take it out to snap a photo. See you in an hour.</p>
+  <button id="home">I'm back</button>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  let card = null, results = [];
+  const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+                  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+  const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  const month = new Date().toLocaleString('en', { month: 'long' });
+  $('month').textContent = month;
+
+  fetch('/api/health').then(r => r.json()).then(h => {
+    durable = !!h.durable;
+    $('health').textContent = h.ok ? `Ready · ${h.model} running locally, offline${durable ? ' · durable checking on' : ''}` : (h.error || `Run: ollama pull ${h.model}`);
+    if (!h.ok) $('health').classList.add('bad');
+  }).catch(() => { $('health').textContent = 'Server not reachable'; $('health').classList.add('bad'); });
+
+  function renderCard() {
+    $('title').textContent = card.title;
+    const done = new Map();
+    results.forEach(r => r.completed.forEach(c => { if (!done.has(c.id)) done.set(c.id, { thumb: r.thumb, ev: c.evidence }); }));
+    $('quests').innerHTML = card.quests.map(q => {
+      const d = done.get(q.id);
+      return `<div class="quest ${d ? 'done' : ''}"><span class="e" aria-hidden="true">${esc(q.emoji)}</span>
+        <span class="t">${esc(q.text)}${d ? `<span class="ev">✓ ${esc(d.ev)}</span>` : ''}</span>
+        ${d ? `<img src="${d.thumb}" alt="Photo that completed: ${esc(q.text)}">` : ''}
+        <span class="p">${d ? '✓ ' : ''}${q.points}</span></div>`;
+    }).join('');
+    $('questCard').style.display = 'block';
+    $('back').style.display = 'block';
+    const score = card.quests.filter(q => done.has(q.id)).reduce((a, q) => a + q.points, 0);
+    $('score').textContent = score;
+    const n = done.size, badges = [];
+    if (n >= 1) badges.push('🌱 First find');
+    if (n >= 3) badges.push('🥾 Trail explorer');
+    if (n === card.quests.length) badges.push('🏆 Mission complete');
+    $('badges').innerHTML = badges.map(b => `<span>${b}</span>`).join('');
+    $('result').style.display = results.length ? 'block' : 'none';
+  }
+
+  $('make').addEventListener('click', async () => {
+    $('make').disabled = true; $('make').textContent = 'Preparing mission… (about 30 s)';
+    try {
+      const r = await fetch('/api/quests', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ place: $('place').value, who: $('who').value, month }) });
+      card = await r.json(); results = []; store.set('quest', { card, startedAt: null });
+      renderCard(); $('journal').style.display = 'none';
+    } finally { $('make').disabled = false; $('make').textContent = 'Make a new mission'; }
+  });
+
+  $('quick').addEventListener('click', async () => {
+    const r = await fetch('/api/quests', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ quick: true }) });
+    card = await r.json(); results = []; store.set('quest', { card, startedAt: null }); renderCard(); $('journal').style.display = 'none';
+  });
+
+  $('go').addEventListener('click', () => {
+    const t = new Date(); store.set('quest', { card, startedAt: t.toISOString() });
+    $('startAt').textContent = t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    $('awayList').textContent = card.quests.map(q => q.emoji).join('  ');
+    $('away').style.display = 'block'; $('home').focus();
+  });
+  $('home').addEventListener('click', () => { $('away').style.display = 'none'; $('photos').focus(); });
+
+  let durable = false;
+  const readFile = (f) => new Promise(res => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(f); });
+  const post = (url, body) => fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(r => r.json());
+
+  $('photos').addEventListener('change', async (e) => {
+    const files = [...e.target.files];
+    e.target.value = '';
+    if (durable) return checkDurably(files);
+    for (const [i, f] of files.entries()) {
+      $('progress').textContent = `Checking photo ${i + 1} of ${files.length} on this computer… (~30 s each)`;
+      try {
+        const d = await post('/api/check', { quests: card.quests, image: await readFile(f) });
+        if (d.error) { $('progress').textContent = d.error; continue; }
+        results.push({ ...d, name: f.name, fallbackTime: f.lastModified });
+        renderCard(); renderJournal();
+      } catch (err) { $('progress').textContent = 'Something went wrong: ' + err; }
+    }
+    $('progress').textContent = `Done: ${files.length} photo${files.length === 1 ? '' : 's'} checked.`;
+  });
+
+  // Durable mode (server running with Temporal): save every photo first, then a workflow checks them one by one.
+  // You can close this tab or restart the server; reopening the page picks the walk back up.
+  async function checkDurably(files) {
+    const walkId = crypto.randomUUID(), names = [];
+    for (const [i, f] of files.entries()) {
+      $('progress').textContent = `Saving photo ${i + 1} of ${files.length}…`;
+      const name = 'p' + i, d = await post('/api/walk/photo', { walk_id: walkId, name, image: await readFile(f), modified: f.lastModified });
+      if (d.error) { $('progress').textContent = `${f.name}: ${d.error}`; continue; }
+      names.push(name);
+    }
+    await post('/api/walk/start', { walk_id: walkId, names, quests: card.quests });
+    store.set('walk', { id: walkId, card });
+    pollWalk(walkId);
+  }
+
+  async function pollWalk(walkId) {
+    let p;
+    try { p = await (await fetch('/api/walk/' + walkId)).json(); } catch { p = { error: 'server not reachable' }; }
+    if (p.error) { $('progress').textContent = `Waiting for the server (${p.error})…`; return setTimeout(() => pollWalk(walkId), 5000); }
+    results = p.results; renderCard(); if (results.length) renderJournal();
+    const failed = p.failed.length ? ` · ${p.failed.length} could not be checked` : '';
+    if (p.running) {
+      $('progress').textContent = `Checked ${results.length} of ${p.total} photos${failed}. Safe to close this tab: checking continues on this computer.`;
+      setTimeout(() => pollWalk(walkId), 3000);
+    } else {
+      $('progress').textContent = `Done: ${results.length} of ${p.total} photos checked${failed}.`;
+      store.set('walk', null);
+    }
+  }
+
+  function renderJournal() {
+    const items = results.map(r => ({ ...r, t: new Date(r.taken_at || r.fallbackTime) })).sort((a, b) => a.t - b.t);
+    // Only camera times give a real walk length; file dates of copied photos can be days apart.
+    const timed = items.filter(i => i.taken_at);
+    const mins = timed.length >= 2 ? Math.round((timed[timed.length - 1].t - timed[0].t) / 60000) : 0;
+    const found = new Set(results.flatMap(r => r.completed.map(c => c.id))).size;
+    $('summary').textContent = `${items.length} photos · ${found} of ${card.quests.length} objectives` +
+      (mins > 0 ? ` · ${mins} minutes from first to last photo` : '');
+    const pts = items.filter(i => i.gps), noTime = items.filter(i => !i.taken_at).length;
+    // Messaging apps (WhatsApp and others) and some share sheets strip EXIF, so say so instead of showing nothing.
+    const missing = [];
+    if (pts.length < items.length) missing.push(`no location in ${items.length - pts.length} of ${items.length} photos`);
+    if (noTime) missing.push(`no camera time in ${noTime}`);
+    $('map').innerHTML = (pts.length >= 2 ? routeSvg(pts) : '') + (missing.length ? `<p class="status bad">Heads up: ${missing.join(', ')}.
+      Messaging apps like WhatsApp remove this data, and iPhone sharing can leave location out.
+      For the route and timeline, copy the original photos over USB or AirDrop (with location on in the share options).</p>` : '');
+    $('entries').innerHTML = items.map(i => `<div class="journal-item"><img src="${i.thumb}" alt="${esc(i.what_i_see)}">
+      <div><span class="time">${i.taken_at ? i.t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : esc(i.name)}</span>
+      <div>${esc(i.what_i_see)}</div>
+      <div class="status">${i.completed.map(c => '✓ ' + esc(card.quests.find(q => q.id === c.id).text)).join(' · ') || 'No mission objective, still a nice find'}</div></div></div>`).join('');
+    $('journal').style.display = 'block';
+  }
+
+  // A tiny offline "map": the GPS points of your photos, joined in time order.
+  function routeSvg(pts) {
+    const lat = pts.map(p => p.gps[0]), lon = pts.map(p => p.gps[1]);
+    const minLat = Math.min(...lat), maxLat = Math.max(...lat), minLon = Math.min(...lon), maxLon = Math.max(...lon);
+    const k = Math.cos(((minLat + maxLat) / 2) * Math.PI / 180);
+    const w = Math.max((maxLon - minLon) * k, 1e-5), h = Math.max(maxLat - minLat, 1e-5), s = 280 / Math.max(w, h);
+    const xy = pts.map(p => [20 + (p.gps[1] - minLon) * k * s, 20 + (maxLat - p.gps[0]) * s]);
+    const metres = pts.slice(1).reduce((a, p, i) => { const q = pts[i];
+      const dy = (p.gps[0] - q.gps[0]) * 111320, dx = (p.gps[1] - q.gps[1]) * 111320 * k; return a + Math.hypot(dx, dy); }, 0);
+    return `<svg viewBox="0 0 ${40 + w * s} ${40 + h * s}" role="img" aria-label="Route of your photos, about ${Math.round(metres)} metres">
+      <polyline points="${xy.map(p => p.join(',')).join(' ')}" fill="none" stroke="#2f6b2a" stroke-width="3" stroke-linejoin="round"/>
+      ${xy.map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="6" fill="${i ? '#f2b632' : '#2f6b2a'}"/>`).join('')}
+      </svg><p class="status">About ${(metres / 1000).toFixed(2)} km between photos (straight lines, offline).</p>`;
+  }
+
+  const saved = store.get('quest');
+  if (saved && saved.card) { card = saved.card; renderCard(); }
+  const walk = store.get('walk');
+  if (walk && walk.id) { card = walk.card; renderCard(); pollWalk(walk.id); }
+</script>
+</body>
+</html>
